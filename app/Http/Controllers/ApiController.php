@@ -47,7 +47,7 @@ class ApiController extends Controller
                 'ticket_id' => $ticketId 
             ]);
         } catch (Exception $e) {
-            Log::error("Error al crear ticket con la API: " . $e->getMessage());
+            Log::error("Error al crear ticket con la API: "  . $ticketId ." ". $e->getMessage());
             return response()->json([
                 'message' => 'Error al crear el ticket'
             ], 500);
