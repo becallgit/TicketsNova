@@ -140,7 +140,7 @@
         </table>
     </div>
         @if ($tickets->isEmpty())
-            <p class="notickets">No hay cerrados.</p>
+            <p class="notickets">Aun no se ha cerrado ningún ticket.</p>
         @endif
     </div>
     <div style="display: flex; justify-content: center;">
