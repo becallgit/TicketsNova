@@ -221,7 +221,7 @@ class TicketController extends Controller
             $email = $user->email;
 
             $enlace = "http://127.0.0.1:8000/ticket/$id_ticket";
-            Mail::to($email)->send(new asignadoMail($enlace));
+            Mail::to("veronica.sanchez@becallgroup.com")->send(new asignadoMail($enlace));
 
 
             Log::info("El ticket con id: ". $id_ticket . "se ha asignado al usuario con id: " . $id_user);
