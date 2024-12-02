@@ -6,9 +6,10 @@
     <title>Document</title>
 </head>
 <body>
-    <p>Buenos días,</p>
-    <p>Se te ha asignado un nuevo ticket</p>
-    <p>Para mas informacion acceda al siguiente enlace:</p>
+<p>Hola, se te ha asignado un ticket.<br>
+    Para mas información acceda al siguiente enlace:
+    </p>
+
     <a href="{{$enlace}}">HAZ CLICK AQUI PARA VER EL TICKET</a>
 </body>
 </html>

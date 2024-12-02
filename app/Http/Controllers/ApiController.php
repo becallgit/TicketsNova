@@ -35,11 +35,16 @@ class ApiController extends Controller
                 'estado' => $estado
             ]);
 
-        
+            $enlace = "https://asicticket.nova-iberia.es/ticket/$ticketId";
             $ticketId = $ticket->id;
-
-            $enlace = "http://127.0.0.1:8000/ticket/$ticketId";
-            Mail::to("veronica.sanchez@becallgroup.com")->send(new NotifyAbierto($enlace));
+            $team = $ticket->team_id;
+            if($team == 1){
+                Mail::to("veronica.sanchez@becallgroup.com")->send(new NotifyAbierto($enlace));
+            }else{
+                Mail::to("verokrz98@gmail.com")->send(new NotifyAbierto($enlace));
+            }
+          
+           
             Log::info("Ticket creado con ID: " . $ticketId);
 
             return response()->json([

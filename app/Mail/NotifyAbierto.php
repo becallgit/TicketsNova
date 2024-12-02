@@ -19,7 +19,7 @@ class NotifyAbierto extends Mailable
     // Funcion para generar los correos
     public function build(){
     
-        return $this->subject('Se ha abierto un nuevo ticket') // Introducimos el asunto del correo
+        return $this->subject('Se ha creado un nuevo ticket') // Introducimos el asunto del correo
                     ->view('emails.nuevoTicket');
                  
     }

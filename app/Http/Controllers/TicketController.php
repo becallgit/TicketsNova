@@ -220,7 +220,7 @@ class TicketController extends Controller
             $user = User::find($id_user);
             $email = $user->email;
 
-            $enlace = "http://127.0.0.1:8000/ticket/$id_ticket";
+            $enlace = "https://asicticket.nova-iberia.es/ticket/$id_ticket";
             Mail::to("veronica.sanchez@becallgroup.com")->send(new asignadoMail($enlace));
 
 

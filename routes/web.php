@@ -23,7 +23,7 @@ Route::get('/', function () {
 Route::get('/login', [AuthController::class, 'index'])->name('login');
 Route::post('/log-in', [AuthController::class, 'login'])->name('login.custom'); 
 Route::get('/signout', [AuthController::class, 'signOut'])->name('signout');
-
+Route::get('/ticket/{ticket}', [TicketController::class, 'mostrarTicket'])->name('ticket.mostrado');
 Route::middleware(['auth'])->group(function () {
     Route::get('/Dashboard', [DashboardController::class, 'index'])->name('dashboard');
 
