@@ -39,9 +39,9 @@ class ApiController extends Controller
         
             $team = $ticket->team_id;
             if($team == 1){
-                Mail::to("veronica.sanchez@becallgroup.com")->send(new NotifyAbierto($enlace));
+                Mail::to("recepcion3@dismoauto.skoda.es")->send(new NotifyAbierto($enlace));
             }else{
-                Mail::to("verokrz98@gmail.com")->send(new NotifyAbierto($enlace));
+                Mail::to("mjfbelmonte@veraimport.es")->send(new NotifyAbierto($enlace));
             }
           
            

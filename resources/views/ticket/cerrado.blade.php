@@ -74,7 +74,7 @@
                     <th>Para</th>
                     <th>Asignado a</th>
                     <th>Nombre Cliente</th>
-                    <th>Telefono de contacto</th>
+                    <!-- <th>Telefono de contacto</th> -->
                     <th>Matricula</th>
                     <th>Bastidor</th>
                     <th>Observaciones</th>
@@ -103,7 +103,7 @@
                         @endif
                         </td>
                         <td>{{ $ticket->nombre_cliente}}</td>
-                        <td>{{ $ticket->telefono }}</td>
+                        <!-- <td>{{ $ticket->telefono }}</td> -->
                         <td>{{ $ticket->matricula }}</td>
                         <td>{{ $ticket->bastidor }}</td>
                         <td style="max-width: 150px; overflow: hidden; text-overflow: ellipsis; white-space: nowrap;">{{ $ticket->observaciones_ticket}}</td>
