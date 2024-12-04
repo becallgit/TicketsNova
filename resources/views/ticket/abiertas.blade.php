@@ -398,6 +398,16 @@
            border-radius:5px;
          cursor:pointer
         }
+        .asignado{
+            padding:6px;
+            border-radius:6px;
+            border: none; 
+            cursor:pointer;
+   
+        }
+        .asignado:hover{
+            background-color:white
+        }
         .sinasignar:hover{
             background-color: white;
         }
