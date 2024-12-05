@@ -40,7 +40,7 @@ class TicketController extends Controller
             $ticket->telefono = $request->input('telefono');
             $ticket->observaciones_ticket = $request->input('observaciones_ticket');
             $ticket->estado = "Abierto";
-            $ticket->creado = Carbon::now()->format('d-m-Y H:i:s');
+            $ticket->creado = Carbon::now()->format('Y-m-d H:i:s');
          
             $ticket->save();
 
@@ -201,39 +201,39 @@ class TicketController extends Controller
 
     public function asignarTicket(Request $request)
     {
-        try {
+        try{
             $id_ticket = $request->input('ticket_id');
             $id_user = $request->input('id_user');
-    
+        
             if (empty($id_ticket) || empty($id_user)) {
                 Log::error('Ticket ID o User ID vacío', ['ticket_id' => $id_ticket, 'user_id' => $id_user]);
                 return redirect()->back()->withErrors('No se pudo asignar el ticket. Por favor, verifica que has seleccionado un usuario.');
             }
     
-  
             Ticket_Asignado::updateOrCreate(
                 ['id_ticket' => $id_ticket],
                 ['id_user' => $id_user]
             );
-    
-   
         
-         
+    
+            Ticket::where('id', $id_ticket)->update([
+                'asignado' => Carbon::now()->format('Y-m-d H:i:s')
+            ]);
+    
+
             $user = User::find($id_user);
             $email = $user->email;
-    
-      
+
             $enlace = "https://asicticket.nova-iberia.es/ticket/$id_ticket";
-    
-           
             Mail::to($email)->send(new asignadoMail($enlace));
-    
-            Log::info("El ticket con id: " . $id_ticket . " se ha asignado al usuario con id: " . $id_user);
+
+
+            Log::info("El ticket con id: ". $id_ticket . "se ha asignado al usuario con id: " . $id_user);
             return redirect()->back()->with('success', 'El ticket ha sido asignado correctamente.');
-        } catch (Exception $e) {
-            Log::error('Error al asignar el ticket con id : ' . $id_ticket . ' mensaje de error ' . $e->getMessage());
-         
+        }catch(Exception $e){
+            Log::error('Error al asignar el ticket con id : '. $id_ticket . ' mensaje de error ' . $e->getMessage());
         }
+
     }
     
 
@@ -329,7 +329,7 @@ class TicketController extends Controller
         $ticket->bastidor = $request->bastidor;
         $ticket->telefono = $request->telefono;
         $ticket->observaciones_ticket = $request->observaciones_ticket;
-        $ticket->actualizado = Carbon::now()->format('d-m-Y H:i:s');
+        $ticket->actualizado = Carbon::now()->format('Y-m-d H:i:s');
    
         $ticket->save();
  
@@ -359,7 +359,7 @@ class TicketController extends Controller
             $ticket = Ticket::find($id);
             if ($ticket) {
                 $ticket->estado = 'Cerrado';
-                $ticket->cerrado = Carbon::now()->format('d-m-Y H:i:s');
+                $ticket->cerrado = Carbon::now()->format('Y-m-d H:i:s');
                 $ticket->save();
             }
             return redirect()->back()->with('success', 'ticket cerrado.');

@@ -22,7 +22,7 @@ class ApiController extends Controller
             $telefono = $request->input('telefono');
             $observaciones = $request->input('observaciones');
             $estado = "Abierto";
-            $creado = Carbon::now()->format('d-m-Y H:i:s');
+            $creado = Carbon::now()->format('Y-m-d H:i:s');
 
     
             $ticket = Ticket::create([
