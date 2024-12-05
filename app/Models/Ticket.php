@@ -9,6 +9,7 @@ class Ticket extends Model
 {
     use HasFactory;
     protected $fillable = [
+        'idlogcall',
         'solicitante',
         'nombre_cliente',
         'team_id',

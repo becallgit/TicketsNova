@@ -14,6 +14,7 @@ class ApiController extends Controller
     public function CreateTicket(Request $request)
     {
         try {
+            $idlogcall = $request->input('idlogcall');
             $team_id = $request->input('team_id');
             $nombre_cliente = $request->input('nombre_cliente');
             $matricula = $request->input('matricula');
@@ -25,6 +26,7 @@ class ApiController extends Controller
 
     
             $ticket = Ticket::create([
+                'idlogcall' => $idlogcall,
                 'team_id' => $team_id,
                 'nombre_cliente' => $nombre_cliente,
                 'matricula' => $matricula,
