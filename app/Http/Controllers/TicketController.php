@@ -217,10 +217,7 @@ class TicketController extends Controller
             );
     
    
-            Ticket::where('id', $id_ticket)->update([
-                'asignado' => Carbon::now()->format('d-m-Y H:i:s')
-            ]);
-    
+        
          
             $user = User::find($id_user);
             $email = $user->email;
