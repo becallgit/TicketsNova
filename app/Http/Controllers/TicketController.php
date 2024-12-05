@@ -387,7 +387,7 @@ public function VerCerrados(Request $request)
         return $query->where('creado', 'like', "%{$creado}%");
     });
 
-    $tickets->orderBy('creado', 'desc');
+    $ticketsQuery->orderBy('creado', 'desc');
     if ($user->rol != 'admin') {
         $ticketsQuery->where('team_id', $user->team_id);
     }
