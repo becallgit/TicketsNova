@@ -90,17 +90,19 @@ class TicketController extends Controller
         })->when($request->creado, function ($query, $creado) {
             return $query->where('creado', 'like', "%{$creado}%");
         });
-
+    
+   
+        $tickets->orderBy('creado', 'desc');
+    
         if (Auth::user()->rol == "admin") {
-          
             $tickets = $tickets->simplePaginate(10);
         } else {
-          
             $tickets = $tickets->where('team_id', $teamId)->simplePaginate(10);
         }
     
         return view("ticket.solicitudes-globales", compact('username', 'tickets'));
     }
+    
     public function verTicketsAbiertos(Request $request)
     {
         $username = Auth::user()->username;
