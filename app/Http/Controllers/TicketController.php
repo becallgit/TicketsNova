@@ -137,7 +137,7 @@ class TicketController extends Controller
             return $query->where('creado', 'like', "%{$creado}%");
         });
     
-    
+        $tickets->orderBy('creado', 'desc');
         if (Auth::user()->rol == "admin") {
             // Administrador ve todos los tickets abiertos
         } else {
@@ -183,7 +183,7 @@ class TicketController extends Controller
             return $query->where('creado', 'like', "%{$creado}%");
         });
         
-    
+        $tickets->orderBy('creado', 'desc');
         if (Auth::user()->rol == "admin") {
             $tickets = $tickets->whereNotIn('id', $assignedTicketIds);
         } else if (Auth::user()->rol == "usuario") {
@@ -292,7 +292,7 @@ class TicketController extends Controller
             return $query->where('creado', 'like', "%{$creado}%");
         })
             ->simplePaginate(10);
-    
+            $tickets->orderBy('creado', 'desc');
         return view('ticket.mis_solicitudes', compact('username', 'tickets'));
     }
     
@@ -387,7 +387,7 @@ public function VerCerrados(Request $request)
         return $query->where('creado', 'like', "%{$creado}%");
     });
 
-
+    $tickets->orderBy('creado', 'desc');
     if ($user->rol != 'admin') {
         $ticketsQuery->where('team_id', $user->team_id);
     }
