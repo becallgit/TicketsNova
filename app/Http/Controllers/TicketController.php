@@ -259,16 +259,19 @@ class TicketController extends Controller
     }
 
     public function verMisSolicitudes(Request $request)
-    {
-        $username = Auth::user()->username;
-        $userId = Auth::id();
-       
-        $assignedTicketIds = Ticket_Asignado::where('id_user', $userId)->pluck('id_ticket')->toArray();
+{
+    $username = Auth::user()->username;
+    $userId = Auth::id();
     
-        $tickets = Ticket::whereIn('id', $assignedTicketIds)
-       ->when($request->id, function ($query, $id) {
+    // Obtener los IDs de tickets asignados al usuario
+    $assignedTicketIds = Ticket_Asignado::where('id_user', $userId)->pluck('id_ticket')->toArray();
+
+    // Construir la consulta de tickets
+    $tickets = Ticket::whereIn('id', $assignedTicketIds)
+        ->when($request->id, function ($query, $id) {
             return $query->where('id', $id);
-        })->when($request->para, function ($query, $para) {
+        })
+        ->when($request->para, function ($query, $para) {
             return $query->whereHas('team', function ($q) use ($para) {
                 $q->where('nombre', 'like', "%{$para}%");
             });
@@ -277,25 +280,33 @@ class TicketController extends Controller
             return $query->whereHas('usuarioAsignado', function ($q) use ($asignado_a) {
                 $q->where('username', 'like', "%{$asignado_a}%");
             });
-            
-        })->when($request->nombre_cliente, function ($query, $nombre_cliente) {
+        })
+        ->when($request->nombre_cliente, function ($query, $nombre_cliente) {
             return $query->where('nombre_cliente', 'like', "%{$nombre_cliente}%");
-        })->when($request->telefono, function ($query, $telefono) {
+        })
+        ->when($request->telefono, function ($query, $telefono) {
             return $query->where('telefono', 'like', "%{$telefono}%");
-        })->when($request->matricula, function ($query, $matricula) {
+        })
+        ->when($request->matricula, function ($query, $matricula) {
             return $query->where('matricula', 'like', "%{$matricula}%");
-        })->when($request->bastidor, function ($query, $bastidor) {
+        })
+        ->when($request->bastidor, function ($query, $bastidor) {
             return $query->where('bastidor', 'like', "%{$bastidor}%");
-        })->when($request->observaciones_ticket, function ($query, $observaciones_ticket) {
+        })
+        ->when($request->observaciones_ticket, function ($query, $observaciones_ticket) {
             return $query->where('observaciones_ticket', 'like', "%{$observaciones_ticket}%");
-        })->when($request->creado, function ($query, $creado) {
+        })
+        ->when($request->creado, function ($query, $creado) {
             return $query->where('creado', 'like', "%{$creado}%");
         })
-            ->simplePaginate(10);
-            $tickets->orderBy('creado', 'desc');
-        return view('ticket.mis_solicitudes', compact('username', 'tickets'));
-    }
-    
+        // Ordenar por created_at en orden descendente
+        ->orderBy('created_at', 'desc')
+        ->simplePaginate(10);
+
+    // Retornar la vista con los tickets filtrados
+    return view('ticket.mis_solicitudes', compact('username', 'tickets'));
+}
+
 
     public function VerEditarTicket($id){
         $username = Auth::user()->username;
