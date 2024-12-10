@@ -94,9 +94,9 @@ class TicketController extends Controller
         $tickets->orderBy('creado', 'desc');
     
         if (Auth::user()->rol == "admin") {
-            $tickets = $tickets->simplePaginate(10);
+            $tickets = $tickets->Paginate(10);
         } else {
-            $tickets = $tickets->where('team_id', $teamId)->simplePaginate(10);
+            $tickets = $tickets->where('team_id', $teamId)->Paginate(10);
         }
     
         return view("ticket.solicitudes-globales", compact('username', 'tickets'));
@@ -145,7 +145,7 @@ class TicketController extends Controller
         }
     
      
-        $tickets = $tickets->simplePaginate(10);
+        $tickets = $tickets->Paginate(10);
     
         return view('ticket.abiertas', compact('username', 'tickets'));
     }
@@ -191,7 +191,7 @@ class TicketController extends Controller
                                ->whereNotIn('id', $assignedTicketIds);
         }
         
-        $tickets = $tickets->simplePaginate(10);
+        $tickets = $tickets->Paginate(10);
     
         return view('ticket.solicitudes_sinAsig', compact('username', 'tickets'));
     }
@@ -303,7 +303,7 @@ class TicketController extends Controller
         })
         // Ordenar por created_at en orden descendente
         ->orderBy('created_at', 'desc')
-        ->simplePaginate(10);
+        ->Paginate(10);
 
     // Retornar la vista con los tickets filtrados
     return view('ticket.mis_solicitudes', compact('username', 'tickets'));
@@ -405,7 +405,7 @@ public function VerCerrados(Request $request)
         $ticketsQuery->where('team_id', $user->team_id);
     }
 
-    $tickets = $ticketsQuery->simplePaginate(10);
+    $tickets = $ticketsQuery->Paginate(10);
 
     return view("ticket.cerrado", compact('username', 'tickets'));
 }

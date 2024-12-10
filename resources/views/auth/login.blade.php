@@ -98,7 +98,7 @@
        <p class="form-title">TICKETS NOVA</p>
         <div class="input-container">
             @csrf
-            <input type="text" placeholder="Usuario de Active Directory" id="username"  name="username" required autofocus>
+            <input type="text" placeholder="Usuario" id="username"  name="username" required autofocus>
             @if ($errors->has('username'))
             <span class="text-danger">{{ $errors->first('username') }}</span>
             @endif

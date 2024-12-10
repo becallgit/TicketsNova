@@ -231,6 +231,64 @@
 
 
 <style>
+        nav.pagination {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    gap: 10px;
+    margin: 12px 0;
+}
+
+nav.pagination a,
+nav.pagination span {
+    display: inline-block;
+    padding: 5px 10px;
+    font-size: 16px;
+    font-weight: 500;
+    text-decoration: none;
+    color: #8598b1;
+    border: 2px solid #8598b1;
+    border-radius: 8px;
+    background-color: #fff;
+    transition: all 0.3s ease-in-out;
+}
+
+/* Estilo al pasar el ratón por los enlaces */
+nav.pagination a:hover {
+    background-color: #8598b1;
+    color: #fff;
+    border-color:#8598b1;
+}
+
+/* Página activa */
+nav.pagination span.font-weight-bold {
+    background-color: #8598b1;
+    color: #fff;
+    border-color: #8598b1;
+    font-weight: bold;
+}
+
+/* Flechas deshabilitadas */
+nav.pagination span.text-muted {
+    color: #aaa;
+    border-color: #ddd;
+    cursor: not-allowed;
+    background-color: #f9f9f9;
+}
+
+/* Ajuste de flechas */
+nav.pagination a:first-child,
+nav.pagination a:last-child {
+    font-size: 18px;
+    padding: 6px 9px;
+ 
+}
+
+/* Estilo general */
+nav.pagination span,
+nav.pagination a {
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+}
         body {
             font-family: "Roboto";
             margin: 0;
