@@ -23,7 +23,8 @@ class Ticket extends Model
         'cerrado',
         'actualizado',
         'id_motivo_pausa',
-        'pausado'
+        'pausado',
+        'tipo_incidencia'
     ];
    protected $table = "tickets";
    public function team()
