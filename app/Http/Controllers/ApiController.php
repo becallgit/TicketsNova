@@ -46,8 +46,16 @@ class ApiController extends Controller
              
                 Mail::to("recepcion3@dismoauto.skoda.es")->send(new NotifyAbierto($enlace));
                 Log::info("correo enviado a dismoauto");
-            }else{
-                Mail::to("mjfbelmonte@veraimport.es")->send(new NotifyAbierto($enlace));
+            }else if($team == 2){
+                try{
+                    $recipients = ["mjfbelmonte@veraimport.es", "pgarcia@veraimport.es"];
+                    Mail::to($recipients)->send(new NotifyAbierto($enlace));
+                    Log::info("correo enviado a vera import");
+                }catch (Exception $e) {
+                    Log::error("Error al enviar el email a vera " . $e->getMessage());
+                }
+
+              
             }
           
            
