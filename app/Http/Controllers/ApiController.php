@@ -57,7 +57,7 @@ class ApiController extends Controller
 
               
             }else if($team == 3){
-                Mail::to("riscalalfonso@gmail.com")->send(new NotifyAbierto($enlace));
+                Mail::to("postventa@riscal.audi.es")->send(new NotifyAbierto($enlace));
                 Log::info("correo enviado a talleres riscal");
             }
           
