@@ -24,7 +24,7 @@ class ApiController extends Controller
             $estado = "Abierto";
             $creado = Carbon::now()->format('Y-m-d H:i:s');
             $incidencia = $request->input('tipo_incidencia');
-
+            $presupuesto = $request->input('presupuesto');
     
             $ticket = Ticket::create([
                 'idlogcall' => $idlogcall,
@@ -36,7 +36,8 @@ class ApiController extends Controller
                 'observaciones_ticket' => $observaciones,
                 'creado' => $creado,
                 'estado' => $estado,
-                'tipo_incidencia'=>$incidencia
+                'tipo_incidencia'=>$incidencia,
+                'presupuesto'=>$presupuesto
             ]);
             $ticketId = $ticket->id;
             $enlace = "https://asicticket.nova-iberia.es/ticket/$ticketId";
