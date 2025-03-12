@@ -53,7 +53,7 @@
     <div class="equipos-container {{ $userRole != 'admin' || (isset($ticketsPorEquipo) && $ticketsPorEquipo->count() == 1) ? 'centrado' : '' }}">
     @if ($userRole == 'admin')
         @foreach ($ticketsPorEquipo as $equipo)
-        <a href="{{ route('ver.accesoDirecto',$equipo->id) }}">
+        <a  class="direct" href="{{ route('ver.accesoDirecto',$equipo->id) }}">
             <div class="equipo">
                 <div class="team-title">{{ $equipo->nombre }}</div>
                 <div class="tarjetas-container">
@@ -268,7 +268,9 @@
   
     gap: 30px; 
 }
-
+.direct{
+    text-decoration:none
+}
  
 
     </style>
