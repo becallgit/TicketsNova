@@ -53,6 +53,7 @@
     <div class="equipos-container {{ $userRole != 'admin' || (isset($ticketsPorEquipo) && $ticketsPorEquipo->count() == 1) ? 'centrado' : '' }}">
     @if ($userRole == 'admin')
         @foreach ($ticketsPorEquipo as $equipo)
+        <a href="{{ route('ver.accesoDirecto',$equipo->id) }}">
             <div class="equipo">
                 <div class="team-title">{{ $equipo->nombre }}</div>
                 <div class="tarjetas-container">
@@ -66,8 +67,10 @@
                     </div>
                 </div>
             </div>
+            </a>
         @endforeach
     @else
+    
         <div class="equipo">
             <div class="team-title">{{ $teamName }}</div>
             <div class="tarjetas-container">
@@ -202,6 +205,8 @@
         width: 100%; 
         max-width: 460px; 
         margin: 0 auto; 
+        cursor:pointer;
+
     }
 
   
@@ -218,6 +223,8 @@
         display: flex;
         gap: 15px;
         justify-content: center; 
+      
+      
     }
 
    
@@ -234,7 +241,7 @@
         max-width: 150px;
     }
 
-    .tarjeta:hover {
+    .equipo:hover {
         transform: translateY(-4px);
         box-shadow: 0 6px 15px rgba(0, 0, 0, 0.15);
     }

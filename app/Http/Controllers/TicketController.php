@@ -411,6 +411,46 @@ public function VerCerrados(Request $request)
 }
 
 
+public function MostrarDismoauto(Request $request, $team_id){
+    $username = Auth::user()->username;
 
+    
+    $tickets = Ticket::query();
+    
+       
+    $tickets->where('team_id', $team_id);
+
+    $tickets->when($request->id, function ($query, $id) {
+        return $query->where('id', $id);
+    })->when($request->para, function ($query, $para) {
+        return $query->whereHas('team', function ($q) use ($para) {
+            $q->where('nombre', 'like', "%{$para}%");
+        });
+    })->when($request->asignado_a, function ($query, $asignado_a) {
+        return $query->whereHas('usuarioAsignado', function ($q) use ($asignado_a) {
+            $q->where('username', 'like', "%{$asignado_a}%");
+        });
+    })->when($request->nombre_cliente, function ($query, $nombre_cliente) {
+        return $query->where('nombre_cliente', 'like', "%{$nombre_cliente}%");
+    })->when($request->telefono, function ($query, $telefono) {
+        return $query->where('telefono', 'like', "%{$telefono}%");
+    })->when($request->matricula, function ($query, $matricula) {
+        return $query->where('matricula', 'like', "%{$matricula}%");
+    })->when($request->bastidor, function ($query, $bastidor) {
+        return $query->where('bastidor', 'like', "%{$bastidor}%");
+    })->when($request->observaciones_ticket, function ($query, $observaciones_ticket) {
+        return $query->where('observaciones_ticket', 'like', "%{$observaciones_ticket}%");
+    })->when($request->creado, function ($query, $creado) {
+        return $query->where('creado', 'like', "%{$creado}%");
+    });
+
+
+
+ 
+    $tickets = $tickets->Paginate(10);
+
+
+    return view('accesoDirecto.Table',compact("tickets","username","team_id"));
+}
 
 }

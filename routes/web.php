@@ -55,5 +55,5 @@ Route::middleware(['auth'])->group(function () {
 
     Route::get('/export-tickets', [DashboardController::class, 'exportData'])->name('tickets.export');
 
-
+    Route::get('/Tickets/direct/{team_id}', [TicketController::class, 'MostrarDismoauto'])->name('ver.accesoDirecto');
 });
