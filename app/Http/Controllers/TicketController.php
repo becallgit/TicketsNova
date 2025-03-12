@@ -447,7 +447,8 @@ public function MostrarDismoauto(Request $request, $team_id){
 
 
  
-    $tickets = $tickets->Paginate(10);
+    $tickets = $tickets->orderBy('creado', 'desc')->paginate(10);
+
 
 
     return view('accesoDirecto.Table',compact("tickets","username","team_id"));
