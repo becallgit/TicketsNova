@@ -76,7 +76,7 @@ class TicketController extends Controller
     public function mostrarTicketInt($id){
         $username = Auth::user()->username;
         $ticket = Ticket_Interno::findOrFail($id);
-        return view('ticket.ticket', compact('ticket','username'));
+        return view('ticket.ticket-int', compact('ticket','username'));
     }
     public function verSolicitudesGlobales(Request $request)
     {

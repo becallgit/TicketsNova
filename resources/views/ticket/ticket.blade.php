@@ -57,9 +57,37 @@
              <li class="dropdown">
                  <a href="#"><i class="fa-solid fa-user-astronaut"></i>&nbsp;&nbsp;{{$username}}</a>
                  <div class="dropdown-content">
+ 
+                     <a href="{{ route('signout') }}"><i class="fa-solid fa-power-off"></i> Cerrar Sesión</a>
+                 </div>
+             </li>
+         </ul>
+     </nav>
+ 
+     <div class="form-container">
+     <h2>Detalles del Ticket Nº {{$ticket->id}} <!-- &nbsp;<a href="{{ route('ver.Editar', $ticket->id) }}" class="icono" title="Editar Ticket"><i class="fa-solid fa-pen-to-square"></i></a> -->
+     <!-- &nbsp;    <a href="{{ route('cerrar.ticket', $ticket->id) }}" class="icono"  title="Cerrar Ticket"><i class="fa-solid fa-door-closed"></i></a> -->
+ 
+ 
+     </h2>
+         <div class="form-columns">
+             <!-- Columna de Detalles -->
+             <div class="form-section">
+                 <h3>Detalles</h3>
+                 <div class="form-group">
+                 <div class="estado-prioridad" style="display: flex; align-items: center; gap: 20px;">
+                     <div class="estado" style="display: flex; align-items: center; gap: 5px;">
+                         <label>Estado:</label>
+                         <span class="{{ $ticket->estado === 'Abierto' ? 'green' : ($ticket->estado === 'Cerrado' ? 'grey' : ($ticket->estado === 'Pausado' ? 'purple' : 'blue')) }}">
+                         <i class="fa-solid fa-circle"></i> {{$ticket->estado}}
+                     </span>
+ 
+                     </div>
+ 
+ 
+                 </div>
+             </div>
 
- 
- 
                  <div class="form-group">
                      <label for="team_id">Para</label>
                      <input type="text" id="team_id" name="team_id" value="{{ $ticket->team ? $ticket->team->nombre : 'No asignado' }}" readonly>
