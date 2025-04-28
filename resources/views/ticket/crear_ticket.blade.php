@@ -70,7 +70,6 @@
                 <label for="para">Para</label>
                 <select id="para" name="para" required> 
                     <option value="" disabled selected>Para quien es la solicitud...</option>
-                    <option value="superadmin">superadmin</option>
                     <option value="tatiana.pizarro">Tatiana Pizarro</option>
                     <option value="ignaciof.caravia">Ignacio F. Caravia</option>
                 </select>
