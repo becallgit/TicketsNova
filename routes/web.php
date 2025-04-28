@@ -68,5 +68,6 @@ Route::middleware(['auth'])->group(function () {
     Route::get('/tickets/globales-in', [TicketsInternosController::class, 'Globales'])->name('interno.globales');
     Route::get('/tickets/abiertos-in', [TicketsInternosController::class, 'Abiertos'])->name('interno.abiertos');
     Route::get('/tickets/cerrados-in', [TicketsInternosController::class, 'Cerrados'])->name('interno.cerrados');
+    Route::get('/tickets-in/{id}', [TicketsInternosController::class, 'mostrarTicketInt'])->name('interno.mostrar');
     Route::get('/tickets/cerrar-in/{id}', [TicketsInternosController::class, 'CerrarTicket'])->name('interno.cerrar');
 });
