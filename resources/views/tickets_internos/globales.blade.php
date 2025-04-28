@@ -142,7 +142,7 @@
                             </form>
                             @endif
                             &nbsp;| -->
-                            <a href="{{ route('ticket.mostrado', $ticket->id) }}" class="icono"  title="VerTicket"><i class="fa-solid fa-eye"></i></a>
+                            <a href="{{ route('interno.mostrar', $ticket->id) }}" class="icono"  title="VerTicket"><i class="fa-solid fa-eye"></i></a>
                             
                             <!-- &nbsp;|&nbsp;<a href="{{ route('interno.cerrar', $ticket->id) }}" class="icono"  title="Cerrar Ticket"><i class="fa-solid fa-door-closed"></i></a> -->
 
