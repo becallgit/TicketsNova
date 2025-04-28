@@ -31,14 +31,27 @@
                 <li class="dropdown">
                     <a href="{{ route('vista-missolicitudes') }}"><i class="fa-solid fa-check-to-slot"></i>&nbsp;&nbsp;Mis Solicitudes</a>
                 </li>
-              
+                @if (Auth::user()->rol == "admin" && Auth::user()->username != 'angel.lopez')
+                <li class="dropdown">
+                    <a href="#"><i class="fa-solid fa-ticket"></i>&nbsp;&nbsp;Tickets Internos </a>
+                    <div class="dropdown-content">
+                     <a href="{{ route('interno.parami') }}"><i class="fa-solid fa-user-tie"></i>&nbsp;Para mi</a>
+                        <a href="{{ route('interno.globales') }}"><i class="fa-solid fa-earth-africa"></i>&nbsp;Totales</a>
+                        <a href="{{ route('interno.abiertos') }}"><i class="fa-solid fa-door-open"></i>&nbsp;Abiertos</a>
+                        <a href="{{ route('interno.cerrados') }}"><i class="fa-solid fa-door-closed"></i>&nbsp;Cerrados</a>
+    
+                    </div>
+                </li>
+                @endif
                
             </ul>
         </div>
 
         <ul class="menu">
         <!-- <li><a href="{{ route('ver.crearticket') }}"><i class="fa-solid fa-plus"></i>&nbsp;&nbsp;Nueva Solicitud</a></li> -->
-
+        @if (Auth::user()->create_ticket == 1)
+            <li><a href="{{ route('ver.crearticket') }}"><i class="fa-solid fa-plus"></i>&nbsp;&nbsp;Crear Ticket</a></li> 
+        @endif
             <li class="dropdown">
                 <a href="#"><i class="fa-solid fa-user-astronaut"></i>&nbsp;&nbsp;{{$username}}</a>
                 <div class="dropdown-content">

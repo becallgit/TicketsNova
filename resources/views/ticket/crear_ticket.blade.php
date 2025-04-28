@@ -31,13 +31,25 @@
                 <li class="dropdown">
                     <a href="{{ route('vista-missolicitudes') }}"><i class="fa-solid fa-check-to-slot"></i>&nbsp;&nbsp;Mis Solicitudes</a>
                 </li>
-              
-               
+                @if (Auth::user()->rol == "admin" && Auth::user()->username != 'angel.lopez')
+                <li class="dropdown">
+                    <a href="#"><i class="fa-solid fa-ticket"></i>&nbsp;&nbsp;Tickets Internos </a>
+                    <div class="dropdown-content">
+                     <a href="{{ route('interno.parami') }}"><i class="fa-solid fa-user-tie"></i>&nbsp;Para mi</a>
+                        <a href="{{ route('interno.globales') }}"><i class="fa-solid fa-earth-africa"></i>&nbsp;Totales</a>
+                        <a href="{{ route('interno.abiertos') }}"><i class="fa-solid fa-door-open"></i>&nbsp;Abiertos</a>
+                        <a href="{{ route('interno.cerrados') }}"><i class="fa-solid fa-door-closed"></i>&nbsp;Cerrados</a>
+    
+                    </div>
+                </li>
+                @endif
             </ul>
         </div>
 
         <ul class="menu">
-        <li><a href="{{ route('ver.crearticket') }}"><i class="fa-solid fa-plus"></i>&nbsp;&nbsp;Nueva Solicitud</a></li>
+        @if (Auth::user()->create_ticket == 1)
+            <li><a href="{{ route('ver.crearticket') }}"><i class="fa-solid fa-plus"></i>&nbsp;&nbsp;Crear Ticket</a></li> 
+        @endif
 
             <li class="dropdown">
                 <a href="#"><i class="fa-solid fa-user-astronaut"></i>&nbsp;&nbsp;{{$username}}</a>
@@ -55,39 +67,42 @@
         <div class="form-section">
             <h3>Detalles</h3>
             <div class="form-group">
-                <label for="team_id">Para</label>
-                <select id="team_id" name="team_id" required> 
+                <label for="para">Para</label>
+                <select id="para" name="para" required> 
                     <option value="" disabled selected>Para quien es la solicitud...</option>
-                    @foreach ($teams as $team)
-                        <option value="{{ $team->id }}">
-                            {{ $team->nombre }} 
-                        </option>
-                    @endforeach
+                    <option value="superadmin">superadmin</option>
+                    <option value="tatiana.pizarro">Tatiana Pizarro</option>
+                    <option value="ignaciof.caravia">Ignacio F. Caravia</option>
                 </select>
             </div>
             <div class="form-group">
-                <label for="nombre_cliente">Nombre Cliente</label>
-                <input type="text" id="nombre_cliente" name="nombre_cliente" placeholder="Ingrese el nombre del cliente" >
+                <label for="tipo_solicitud">Tipo de solicitud</label>
+                <select name="tipo_solicitud" id="tipo_solicitud">
+                    <option value="" disabled selected>Selecciona...</option>
+                    <option value="Incidencia">Incidencia</option>
+                    <option value="Mejora">Mejora</option>
+                    <option value="Consulta">Consulta</option>
+                </select>
+            </div>
+            <div class="form-group">
+                <label for="cliente">Cliente</label>
+                <input type="text" id="cliente" name="cliente"  >
 
             </div>
             <div class="form-group">
-                <label for="telefono">Telefono de contacto</label>
-                <input type="text" id="telefono" name="telefono" placeholder="Ingrese el telefono de contacto" >
+                <label for="marca">Marca</label>
+                <input type="text" id="marca" name="marca" >
 
             </div>
             <div class="form-group">
-                <label for="matricula">Matricula</label>
-                <input type="text" id="matricula" name="matricula" placeholder="Ingrese la matricula" >
+                <label for="sede">Sede</label>
+                <input type="text" id="sede" name="sede"  >
 
             </div>
+       
             <div class="form-group">
-                <label for="bastidor">Bastidor</label>
-                <input type="text" id="bastidor" name="bastidor" placeholder="Ingrese el bastidor" >
-
-            </div>
-            <div class="form-group">
-                <label for="observaciones_ticket">Observaciones</label>
-                <textarea name="observaciones_ticket" id="observaciones_ticket"></textarea>
+                <label for="observaciones">Observaciones</label>
+                <textarea name="observaciones" id="observaciones"></textarea>
             </div>
         </div>
 

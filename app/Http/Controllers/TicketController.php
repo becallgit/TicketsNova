@@ -12,6 +12,7 @@ use App\Models\Ticket_Asignado;
 use Illuminate\Support\Facades\Log;
 use Exception;
 use Carbon\Carbon;
+use App\Models\Ticket_Interno;
 
 use App\Mail\asignadoMail;
 use Illuminate\Support\Facades\Mail;
@@ -27,35 +28,48 @@ class TicketController extends Controller
     }
 
 
-    public function GuardarTicket(Request $request) {
-        try{
+
+
+    public function GuardarTicket(Request $request) { 
+        try {
+ 
+            $username = $request->input('para');
+    
       
-           
-            $ticket = new Ticket();
-            $ticket->solicitante = $request->input('solicitante');;
-            $ticket->team_id = $request->input('team_id');
-            $ticket->nombre_cliente = $request->input('nombre_cliente');
-            $ticket->matricula = $request->input('matricula');
-            $ticket->bastidor = $request->input('bastidor');
-            $ticket->telefono = $request->input('telefono');
-            $ticket->observaciones_ticket = $request->input('observaciones_ticket');
+            $user = User::where('username', $username)->first();
+    
+    
+            $ticket = new Ticket_Interno();
+            $ticket->para = $username; // Guarda el username si lo deseas mantener textual
+            $ticket->solicitante = Auth::user()->username;
+            $ticket->tipo_solicitud = $request->input('tipo_solicitud');
+            $ticket->cliente = $request->input('cliente');
+            $ticket->marca = $request->input('marca');
+            $ticket->sede = $request->input('sede');
+            $ticket->observaciones = $request->input('observaciones');
             $ticket->estado = "Abierto";
             $ticket->creado = Carbon::now()->format('Y-m-d H:i:s');
-         
+            $ticket->asignado = Carbon::now()->format('Y-m-d H:i:s');
             $ticket->save();
 
-           
-             return redirect()->route('ticket.mostrado', ['ticket' => $ticket->id])->with('success', 'Ticket creado con éxito.');
-        }catch(Exception $e){
+            Ticket_Asignado::create([
+                'id_ticket' => $ticket->id,
+                'id_user' => $user->id
+            ]);
+    
+            return redirect()->route('ticket.mostrado', ['ticket' => $ticket->id])
+                             ->with('success', 'Ticket creado con éxito.');
+        } catch(Exception $e) {
             Log::error('Error al crear el ticket: ' . $e->getMessage());
+            return back()->with('error', 'Ocurrió un error al crear el ticket.');
         }
-        
     }
+    
     
 
     public function mostrarTicket($id){
         $username = Auth::user()->username;
-        $ticket = Ticket::findOrFail($id);
+        $ticket = Ticket_Interno::findOrFail($id);
         return view('ticket.ticket', compact('ticket','username'));
     }
     public function verSolicitudesGlobales(Request $request)

@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 use App\Models\User;
 use App\Models\Ticket;
 use App\Models\Team;
+use App\Models\Ticket_Interno;
 use App\Models\Ticket_Asignado;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Http\Request;
@@ -44,8 +45,13 @@ class DashboardController extends Controller
                                         ->count();
             $teamName = Team::where('id', $userTeamId)->value('nombre'); 
         }
-    
-        return view('dashboard', compact('username', 'userRole', 'ticketsPorEquipo', 'ticketsAbiertos', 'ticketsSinAsignar', 'teamName'));
+        $paraTatiana = Ticket_Interno::where('estado', 'Abierto')
+        ->where('para', 'tatiana.pizarro')
+        ->count();
+        $paraIgnacio = Ticket_Interno::where('estado', 'Abierto')
+        ->where('para', 'ignaciof.caravia')
+        ->count();
+        return view('dashboard', compact('paraTatiana','paraIgnacio','username', 'userRole', 'ticketsPorEquipo', 'ticketsAbiertos', 'ticketsSinAsignar', 'teamName'));
     }
     
 

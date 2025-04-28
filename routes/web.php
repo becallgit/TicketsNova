@@ -4,6 +4,7 @@ use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\AuthController;
 use App\Http\Controllers\DashboardController;
 use App\Http\Controllers\TicketController;
+use App\Http\Controllers\TicketsInternosController;
 /*
 |--------------------------------------------------------------------------
 | Web Routes
@@ -56,4 +57,16 @@ Route::middleware(['auth'])->group(function () {
     Route::get('/export-tickets', [DashboardController::class, 'exportData'])->name('tickets.export');
 
     Route::get('/Tickets/direct/{team_id}', [TicketController::class, 'MostrarDismoauto'])->name('ver.accesoDirecto');
+
+
+
+
+    //tickets internos
+    Route::get('/Para-mi', [TicketsInternosController::class, 'ParaMi'])->name('interno.parami');
+    Route::get('/tickets/get-users-in', [TicketsInternosController::class, 'getUsersByTicket'])->name('interno.get-users');
+    Route::post('/tickets/asignar-in', [TicketsInternosController::class, 'asignarTicket'])->name('interno.asignar');
+    Route::get('/tickets/globales-in', [TicketsInternosController::class, 'Globales'])->name('interno.globales');
+    Route::get('/tickets/abiertos-in', [TicketsInternosController::class, 'Abiertos'])->name('interno.abiertos');
+    Route::get('/tickets/cerrados-in', [TicketsInternosController::class, 'Cerrados'])->name('interno.cerrados');
+    Route::get('/tickets/cerrar-in/{id}', [TicketsInternosController::class, 'CerrarTicket'])->name('interno.cerrar');
 });

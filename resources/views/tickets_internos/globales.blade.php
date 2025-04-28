@@ -64,32 +64,35 @@
 
 
     <div class="container">
-        <h2 style="text-align:center;">Mis Solicitudes</h2>
-        <form method="GET" action="{{ route('vista-missolicitudes') }}">
+        <h2 style="text-align:center;">Tickets Totales</h2>
+        <form method="GET" action="{{ route('interno.globales') }}">
     <div class="filter-container">
         <input type="text" name="id" placeholder="ID" value="{{ request('id') }}">
-        <input type="text" name="asignado_a" placeholder="Asignado a" value="{{ request('asignado_a') }}">
-        <input type="text" name="nombre_cliente" placeholder="Nombre cliente" value="{{ request('nombre_cliente') }}">        
-        <input type="text" name="telefono" placeholder="Telefono" value="{{ request('telefono') }}">
-        <input type="text" name="matricula" placeholder="Matricula" value="{{ request('matricula') }}">
-        <input type="text" name="bastidor" placeholder="Bastidor" value="{{ request('bastidor') }}">
-        <input type="text" name="observaciones_ticket" placeholder="Observaciones" value="{{ request('obserbaciones_ticket') }}">
-        <input type="date" name="creado" placeholder="Fecha de creacion" value="{{ request('creado') }}">
+        <input type="text" name="para" placeholder="Asignado a" value="{{ request('para') }}">
+        <input type="text" name="solicitante" placeholder="Solicitante" value="{{ request('solicitante') }}">        
+        <input type="text" name="tipo_solicitud" placeholder="Tipo de solicitud" value="{{ request('tipo_solicitud') }}">
+        <input type="text" name="cliente" placeholder="Cliente" value="{{ request('cliente') }}">
+        <input type="text" name="marca" placeholder="Marca" value="{{ request('marca') }}">
+        <input type="text" name="sede" placeholder="Sede" value="{{ request('sede') }}">
+        <input type="text" name="observaciones" placeholder="Observaciones" value="{{ request('observaciones') }}">
+        <input type="text" name="estado" placeholder="Estado" value="{{ request('estado') }}">
+        <input type="date" name="creado" placeholder="Creado" value="{{ request('creado') }}">
         <button type="submit">Filtrar</button>
-        <a href="{{ route('vista-missolicitudes') }}"><i class="fa-solid fa-eraser"></i> Limpiar</a>
+        <a href="{{ route('interno.globales') }}"><i class="fa-solid fa-eraser"></i> Limpiar</a>
     </div>
 </form>
         <div class="tabla-contenedor">
+   
         <table>
             <thead>
                 <tr>
                     <th>ID</th>
-                    <th>Para</th>
+                    <th>Solicitante</th>
                     <th>Asignado a</th>
-                    <th>Nombre Cliente</th>
-                    <!-- <th>Telefono de contacto</th> -->
-                    <th>Matricula</th>
-                    <th>Bastidor</th>
+                    <th>Tipo de Solicitud</th>
+                    <th>Cliente</th>
+                    <th>Marca</th>
+                    <th>Sede</th>
                     <th>Observaciones</th>
                     <th>Estado</th>
                     <th>Fecha de Creación</th>
@@ -100,32 +103,31 @@
                 @foreach ($tickets as $ticket)
                     <tr>
                         <td>{{ $ticket->id }}</td>
-                        <td>{{ $ticket->team ? $ticket->team->nombre : 'No asignado' }}</td>
+                        <td>{{ $ticket->solicitante }}</td>
                         <td>
                         @if ($ticket->usuarioAsignado)
-                        <button type="button" class="btn-asignar asignado" data-ticket-id="{{ $ticket->id }}" data-team-id="{{ $ticket->team_id }}">
+                        <button type="button" class="btn-asignar asignado" data-ticket-id="{{ $ticket->id }}" >
                         <i class="fa-solid fa-user-gear"></i>  {{ $ticket->usuarioAsignado->username }}
                             </button>
                         @else
-                            <button type="button" class="btn-asignar sinasignar" data-ticket-id="{{ $ticket->id }}" data-team-id="{{ $ticket->team_id }}">
+                            <button type="button" class="btn-asignar sinasignar" data-ticket-id="{{ $ticket->id }}">
                             Sin Asignar
                             </button>
 
                            
                         @endif
                         </td>
-                        <td>{{ $ticket->nombre_cliente}}</td>
-                        <!-- <td>{{ $ticket->telefono }}</td> -->
-                        <td>{{ $ticket->matricula }}</td>
-                        <td>{{ $ticket->bastidor }}</td>
-                        <td style="max-width: 150px; overflow: hidden; text-overflow: ellipsis; white-space: nowrap;">{{ $ticket->observaciones_ticket}}</td>
+                        <td>{{ $ticket->tipo_solicitud}}</td>
+                   
+                        <td>{{ $ticket->cliente }}</td>
+                        <td>{{ $ticket->marca }}</td>
+                        <td>{{ $ticket->sede }}</td>
+                        <td style="max-width: 150px; overflow: hidden; text-overflow: ellipsis; white-space: nowrap;">{{ $ticket->observaciones}}</td>
                         <td>
                         @if($ticket->estado === 'Abierto') 
                         <span  style="color:green;font-weight:bold"><i class="fa-regular fa-circle"></i>&nbsp;&nbsp;{{$ticket->estado}}</span>
                         @elseif($ticket->estado === 'Cerrado') 
                             <span style="color:grey;font-weight:bold"><i class="fa-solid fa-circle-xmark"></i>&nbsp;&nbsp;{{$ticket->estado}}</span> 
-                        @elseif($ticket->estado === 'En Curso') 
-                            <span style="color:blue;font-weight:bold"><i class="fa-solid fa-circle"></i>&nbsp;&nbsp;{{$ticket->estado}}</span>
                         @endif 
                           
                         </td>
@@ -140,9 +142,9 @@
                             </form>
                             @endif
                             &nbsp;| -->
-                            <a href="{{ route('ticket.mostrado', $ticket->id) }}" class="icono"  title="VerTicket"><i class="fa-solid fa-eye"></i></a>&nbsp;|&nbsp;
+                            <a href="{{ route('ticket.mostrado', $ticket->id) }}" class="icono"  title="VerTicket"><i class="fa-solid fa-eye"></i></a>
                             
-                            <a href="{{ route('cerrar.ticket', $ticket->id) }}" class="icono"  title="Cerrar Ticket"><i class="fa-solid fa-door-closed"></i></a>
+                            <!-- &nbsp;|&nbsp;<a href="{{ route('interno.cerrar', $ticket->id) }}" class="icono"  title="Cerrar Ticket"><i class="fa-solid fa-door-closed"></i></a> -->
 
                         </td>
 
@@ -151,10 +153,13 @@
                 @endforeach
             </tbody>
         </table>
-    </div>
+        </div>
         @if ($tickets->isEmpty())
-            <p class="notickets">No tienes tickets asignados.</p>
+            <p class="notickets">No se han encontrado tickets.</p>
         @endif
+    </div>
+    </div>
+ 
     </div>
     <div style="display: flex; justify-content: center;">
     {{ $tickets->links() }}
@@ -162,7 +167,7 @@
     <div id="modal-asignar" style="display:none;">
         <div class="modal-content">
             <h2>Asignar Usuario</h2>
-            <form id="form-asignar" action="{{ route('asignar') }}" method="POST">
+            <form id="form-asignar" action="{{ route('interno.asignar') }}" method="POST">
                 @csrf
                 <input type="hidden" id="ticket-id" name="ticket_id">
                 <label for="user-select">Selecciona un usuario:</label>
@@ -188,7 +193,7 @@
 
             document.getElementById('ticket-id').value = ticketId;
 
-            const url = '{{ route("tickets.get-users") }}?ticket_id=' + ticketId;
+            const url = '{{ route("interno.get-users") }}?ticket_id=' + ticketId;
             console.log('URL de fetch:', url); 
 
             fetch(url, {
@@ -456,6 +461,15 @@ nav.pagination a {
             border-radius: 8px;
             width: 300px;
             box-shadow: 0px 0px 10px rgba(0, 0, 0, 0.1);
+        }
+        .sinasignar{
+           border:none;
+           padding:7px;
+           border-radius:5px;
+         cursor:pointer
+        }
+        .sinasignar:hover{
+            background-color: white;
         }
         .asignado{
             padding:6px;

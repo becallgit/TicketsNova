@@ -31,14 +31,27 @@
                 <li class="dropdown">
                     <a href="{{ route('vista-missolicitudes') }}"><i class="fa-solid fa-check-to-slot"></i>&nbsp;&nbsp;Mis Solicitudes</a>
                 </li>
-              
+                @if (Auth::user()->rol == "admin" && Auth::user()->username != 'angel.lopez')
+                <li class="dropdown">
+                    <a href="#"><i class="fa-solid fa-ticket"></i>&nbsp;&nbsp;Tickets Internos </a>
+                    <div class="dropdown-content">
+                     <a href="{{ route('interno.parami') }}"><i class="fa-solid fa-user-tie"></i>&nbsp;Para mi</a>
+                        <a href="{{ route('interno.globales') }}"><i class="fa-solid fa-earth-africa"></i>&nbsp;Totales</a>
+                        <a href="{{ route('interno.abiertos') }}"><i class="fa-solid fa-door-open"></i>&nbsp;Abiertos</a>
+                        <a href="{{ route('interno.cerrados') }}"><i class="fa-solid fa-door-closed"></i>&nbsp;Cerrados</a>
+    
+                    </div>
+                </li>
+                @endif
                
             </ul>
         </div>
 
         <ul class="menu">
         <!-- <li><a href="{{ route('ver.crearticket') }}"><i class="fa-solid fa-plus"></i>&nbsp;&nbsp;Nueva Solicitud</a></li> -->
-
+        @if (Auth::user()->create_ticket == 1)
+            <li><a href="{{ route('ver.crearticket') }}"><i class="fa-solid fa-plus"></i>&nbsp;&nbsp;Crear Ticket</a></li> 
+        @endif
             <li class="dropdown">
                 <a href="#"><i class="fa-solid fa-user-astronaut"></i>&nbsp;&nbsp;{{$username}}</a>
                 <div class="dropdown-content">
@@ -75,32 +88,33 @@
   
     
                 <div class="form-group">
-                    <label for="team_id">Para</label>
-                    <input type="text" id="team_id" name="team_id" value="{{ $ticket->team ? $ticket->team->nombre : 'No asignado' }}" readonly>
+                    <label for="solicitante">Solicitante</label>
+                    <input type="text" id="solicitante" name="solicitante" value="{{ $ticket->solicitante }}" readonly>
                 </div>
                 <div class="form-group">
-                    <label for="id_user">Asignado a:</label>
-                    <input type="text" id="id_user" name="id_user" value="{{ $ticket->usuarioAsignado->username ?? 'No asignado' }}" readonly>
+                    <label for="para">Asignado a:</label>
+                    <input type="text" id="para" name="para" value="{{ $ticket->para}}" readonly>
                 </div>
                 <div class="form-group">
-                    <label for="nombre_cliente">Nombre Cliente</label>
-                    <input type="text" id="nombre_cliente" name="nombre_cliente" value="{{ $ticket->nombre_cliente }}" readonly>
+                    <label for="tipo_solicitud">Tipo de solicitud</label>
+                    <input type="text" id="tipo_solicitud" name="tipo_solicitud" value="{{ $ticket->tipo_solicitud }}" readonly>
                 </div>
                 <div class="form-group">
-                    <label for="telefono">Telefono de contacto</label>
-                    <input type="text" id="telefono" name="telefono" value="{{ $ticket->telefono }}" readonly>
+                    <label for="cliente">Cliente</label>
+                    <input type="text" id="cliente" name="cliente" value="{{ $ticket->cliente }}" readonly>
+                </div>
+         
+                <div class="form-group">
+                    <label for="marca">Marca</label>
+                    <input type="text" id="marca" name="marca" value="{{ $ticket->marca }}" readonly>
                 </div>
                 <div class="form-group">
-                    <label for="matricula">Matricula</label>
-                    <input type="text" id="matricula" name="matricula" value="{{ $ticket->matricula }}" readonly>
-                </div>
-                <div class="form-group">
-                    <label for="bastidor">Bastidor</label>
-                    <input type="text" id="bastidor" name="bastidor" value="{{ $ticket->bastidor }}" readonly>
+                    <label for="sede">Sede</label>
+                    <input type="text" id="sede" name="sede" value="{{ $ticket->sede }}" readonly>
                 </div>
                 <div class="form-group">
                     <label for="observaciones_ticket">Observaciones</label>
-                    <textarea name="observaciones_ticket" id="observaciones_ticket" readonly>{{ $ticket->observaciones_ticket }}</textarea>
+                    <textarea name="observaciones" id="observaciones" readonly>{{ $ticket->observaciones}}</textarea>
                 </div>
            
             
@@ -109,7 +123,6 @@
             <h3>Mas info:</h3>
                <p><strong>Fecha y Hora de Creacion: </strong>{{$ticket->creado}}</p> 
                <p><strong>Fecha y Hora de Asignacion: </strong>{{$ticket->asignado}}</p>
-               <p><strong>Fecha y Hora de Edicion: </strong>{{$ticket->actualizado}}</p>
                <p><strong>Fecha y Hora de Cierre: </strong>{{$ticket->cerrado}}</p>
             </div>
           
