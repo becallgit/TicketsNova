@@ -58,7 +58,7 @@ class TicketController extends Controller
                 'id_user' => $user->id
             ]);
     
-            return redirect()->route('interno.mostrar', ['ticket' => $ticket->id])
+            return redirect()->route('interno.mostrar', ['id' => $ticket->id])
                              ->with('success', 'Ticket creado con éxito.');
         } catch(Exception $e) {
             Log::error('Error al crear el ticket: ' . $e->getMessage());
