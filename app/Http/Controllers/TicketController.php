@@ -6,6 +6,7 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Storage;
 use App\Models\Ticket;
+use App\Models\Asignados_Internos;
 use App\Models\Team;
 use App\Models\User;
 use App\Models\Ticket_Asignado;
@@ -52,7 +53,7 @@ class TicketController extends Controller
             $ticket->asignado = Carbon::now()->format('Y-m-d H:i:s');
             $ticket->save();
 
-            Ticket_Asignado::create([
+            Asignados_Internos::create([
                 'id_ticket' => $ticket->id,
                 'id_user' => $user->id
             ]);

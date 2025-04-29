@@ -8,6 +8,7 @@ use App\Models\User;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Storage;
 use App\Models\Ticket_Asignado;
+use App\Models\Asignados_Internos;
 use Illuminate\Support\Facades\Log;
 use Exception;
 use Carbon\Carbon;
@@ -174,7 +175,7 @@ class TicketsInternosController extends Controller
         $userId = Auth::user()->id;
     
         // Obtengo los IDs de tickets asignados a este usuario
-        $assignedTicketIds = Ticket_Asignado::where('id_user', $userId)->pluck('id_ticket')->toArray();
+        $assignedTicketIds = Asignados_Internos::where('id_user', $userId)->pluck('id_ticket')->toArray();
     
         // Empiezo el query
         $query = Ticket_Interno::whereIn('id', $assignedTicketIds);
@@ -259,7 +260,7 @@ class TicketsInternosController extends Controller
                 return redirect()->back()->withErrors('No se pudo asignar el ticket. Por favor, verifica que has seleccionado un usuario.');
             }
     
-            Ticket_Asignado::updateOrCreate(
+            Asignados_Internos::updateOrCreate(
                 ['id_ticket' => $id_ticket],
                 ['id_user' => $id_user]
             );

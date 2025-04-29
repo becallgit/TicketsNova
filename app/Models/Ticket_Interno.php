@@ -26,6 +26,6 @@ class Ticket_Interno extends Model
 
    public function usuarioAsignado()
    {
-       return $this->hasOneThrough(User::class, Ticket_Asignado::class, 'id_ticket', 'id', 'id', 'id_user');
+       return $this->hasOneThrough(User::class, Asignados_Internos::class, 'id_ticket', 'id', 'id', 'id_user');
    }
 }
