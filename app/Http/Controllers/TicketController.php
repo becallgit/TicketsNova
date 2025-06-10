@@ -34,14 +34,7 @@ class TicketController extends Controller
     public function GuardarTicket(Request $request) { 
         try {
  
-            $username = $request->input('para');
-    
-      
-            $user = User::where('username', $username)->first();
-    
-    
             $ticket = new Ticket_Interno();
-            $ticket->para = $username; // Guarda el username si lo deseas mantener textual
             $ticket->solicitante = Auth::user()->username;
             $ticket->tipo_solicitud = $request->input('tipo_solicitud');
             $ticket->cliente = $request->input('cliente');
@@ -53,10 +46,7 @@ class TicketController extends Controller
             $ticket->asignado = Carbon::now()->format('Y-m-d H:i:s');
             $ticket->save();
 
-            Asignados_Internos::create([
-                'id_ticket' => $ticket->id,
-                'id_user' => $user->id
-            ]);
+       
     
             return redirect()->route('interno.mostrar', ['id' => $ticket->id])
                              ->with('success', 'Ticket creado con éxito.');
@@ -77,6 +67,8 @@ class TicketController extends Controller
     public function mostrarTicketInt($id){
         $username = Auth::user()->username;
         $ticket = Ticket_Interno::findOrFail($id);
+
+     
         return view('ticket.ticket-int', compact('ticket','username'));
     }
     public function verSolicitudesGlobales(Request $request)
@@ -238,7 +230,8 @@ class TicketController extends Controller
         
     
             Ticket::where('id', $id_ticket)->update([
-                'asignado' => Carbon::now()->format('Y-m-d H:i:s')
+                'asignado' => Carbon::now()->format('Y-m-d H:i:s'),
+                'estado' => "En Curso"
             ]);
     
 

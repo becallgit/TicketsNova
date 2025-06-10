@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>MIS SOLICITUDES</title>
+    <title>PARA MI</title>
     <link rel="shortcut icon" type="image/png" href="{{ asset('/images/icononova.png') }}">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.2/css/all.min.css" integrity="sha512-z3gLpd7yknf1YoNbCzqRKc4qyor8gaKU1qmn+CShxbuBusANI9QpRohGBreCFkKxLhei6S9CQXFEbbKuqLg0DA==" crossorigin="anonymous" referrerpolicy="no-referrer" />
     <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@300&display=swap" rel="stylesheet">
@@ -35,7 +35,8 @@
                 <li class="dropdown">
                     <a href="#"><i class="fa-solid fa-ticket"></i>&nbsp;&nbsp;Tickets Internos </a>
                     <div class="dropdown-content">
-                     <a href="{{ route('interno.parami') }}"><i class="fa-solid fa-user-tie"></i>&nbsp;Para mi</a>
+                     <a href="{{ route('interno.mispetis') }}"><i class="fa-solid fa-person-circle-question"></i>&nbsp;Mis Peticiones</a>
+                     <a href="{{ route('interno.mispetis') }}"><i class="fa-solid fa-user-tie"></i>&nbsp;Para mi</a>
                         <a href="{{ route('interno.globales') }}"><i class="fa-solid fa-earth-africa"></i>&nbsp;Totales</a>
                         <a href="{{ route('interno.abiertos') }}"><i class="fa-solid fa-door-open"></i>&nbsp;Abiertos</a>
                         <a href="{{ route('interno.cerrados') }}"><i class="fa-solid fa-door-closed"></i>&nbsp;Cerrados</a>
@@ -122,14 +123,32 @@
                         <td>{{ $ticket->marca }}</td>
                         <td>{{ $ticket->sede }}</td>
                         <td style="max-width: 150px; overflow: hidden; text-overflow: ellipsis; white-space: nowrap;">{{ $ticket->observaciones}}</td>
-                        <td>
+                            @php
+                        $creado = \Carbon\Carbon::parse($ticket->creado);
+                         @endphp
+
+                       
+                              <td> 
                         @if($ticket->estado === 'Abierto') 
-                        <span  style="color:green;font-weight:bold"><i class="fa-regular fa-circle"></i>&nbsp;&nbsp;{{$ticket->estado}}</span>
+                            @if ($creado->diffInHours(now()) > 24)
+                                <span style="color:darkgreen;font-weight:bold;cursor:pointer" title="Ticket abierto hace más de 24 horas">
+                                    <i class="fa-solid fa-triangle-exclamation"></i>&nbsp;&nbsp;{{ $ticket->estado }}
+                                </span>
+                            @else
+                                <span style="color:green;font-weight:bold">
+                                    <i class="fa-regular fa-circle"></i>&nbsp;&nbsp;{{ $ticket->estado }}
+                                </span>
+                            @endif
                         @elseif($ticket->estado === 'Cerrado') 
-                            <span style="color:grey;font-weight:bold"><i class="fa-solid fa-circle-xmark"></i>&nbsp;&nbsp;{{$ticket->estado}}</span> 
+                            <span style="color:grey;font-weight:bold">
+                                <i class="fa-solid fa-circle-xmark"></i>&nbsp;&nbsp;{{ $ticket->estado }}
+                            </span> 
+                        @elseif($ticket->estado === 'En Curso') 
+                            <span style="color:blue;font-weight:bold">
+                                <i class="fa-solid fa-circle"></i>&nbsp;&nbsp;{{ $ticket->estado }}
+                            </span> 
                         @endif 
-                          
-                        </td>
+                    </td>
                         <td>{{ $ticket->creado}}</td>
                         <td class="acciones">
                             <!-- <a href="{{ route('ver.Editar', $ticket->id) }}" class="icono" title="Editar Ticket"><i class="fa-solid fa-pen-to-square"></i></a>&nbsp;|&nbsp; -->
@@ -304,6 +323,12 @@ nav.pagination span,
 nav.pagination a {
     box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
 }
+    .sinasignar{
+           border:none;
+           padding:7px;
+           border-radius:5px;
+         cursor:pointer
+        }
         body {
             font-family: "Roboto";
             margin: 0;

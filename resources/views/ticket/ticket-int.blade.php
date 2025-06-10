@@ -35,6 +35,7 @@
                 <li class="dropdown">
                     <a href="#"><i class="fa-solid fa-ticket"></i>&nbsp;&nbsp;Tickets Internos </a>
                     <div class="dropdown-content">
+                        <a href="{{ route('interno.mispetis') }}"><i class="fa-solid fa-person-circle-question"></i>&nbsp;Mis Peticiones</a>
                      <a href="{{ route('interno.parami') }}"><i class="fa-solid fa-user-tie"></i>&nbsp;Para mi</a>
                         <a href="{{ route('interno.globales') }}"><i class="fa-solid fa-earth-africa"></i>&nbsp;Totales</a>
                         <a href="{{ route('interno.abiertos') }}"><i class="fa-solid fa-door-open"></i>&nbsp;Abiertos</a>
@@ -77,7 +78,11 @@
                     <div class="estado" style="display: flex; align-items: center; gap: 5px;">
                         <label>Estado:</label>
                         <span class="{{ $ticket->estado === 'Abierto' ? 'green' : ($ticket->estado === 'Cerrado' ? 'grey' : ($ticket->estado === 'Pausado' ? 'purple' : 'blue')) }}">
-                        <i class="fa-solid fa-circle"></i> {{$ticket->estado}}
+                        <i class="fa-solid fa-circle"></i> {{$ticket->estado}} 
+
+                        @if($ticket->para == Auth::user()->username)
+                             <a href="{{ route('interno.cerrar', $ticket->id) }}" class="icono"  title="Cerrar Ticket"><i class="fa-solid fa-door-closed"></i></a>
+                        @endif
                     </span>
 
                     </div>
@@ -92,8 +97,23 @@
                     <input type="text" id="solicitante" name="solicitante" value="{{ $ticket->solicitante }}" readonly>
                 </div>
                 <div class="form-group">
-                    <label for="para">Asignado a:</label>
-                    <input type="text" id="para" name="para" value="{{ $ticket->para}}" readonly>
+                    <label for="para">Asignado a:</label><br>
+                    @if(Auth::user()->rol == "admin")
+                    @if ($ticket->usuarioAsignado)
+                        <button type="button" class="btn-asignar asignado" data-ticket-id="{{ $ticket->id }}" >
+                        <i class="fa-solid fa-user-gear"></i>  {{ $ticket->usuarioAsignado->username }}
+                            </button>
+                        @else
+                            <button type="button" class="btn-asignar sinasignar" data-ticket-id="{{ $ticket->id }}">
+                            Sin Asignar
+                            </button>
+
+                           
+                        @endif
+                    @else
+                    <input type="text" value ="{{ $ticket->usuarioAsignado->username }}">
+                        
+                    @endif
                 </div>
                 <div class="form-group">
                     <label for="tipo_solicitud">Tipo de solicitud</label>
@@ -124,11 +144,281 @@
                <p><strong>Fecha y Hora de Creacion: </strong>{{$ticket->creado}}</p> 
                <p><strong>Fecha y Hora de Asignacion: </strong>{{$ticket->asignado}}</p>
                <p><strong>Fecha y Hora de Cierre: </strong>{{$ticket->cerrado}}</p>
+
+              <form action="{{ route('guardar.atach', $ticket->id)}}" method="POST" enctype="multipart/form-data">
+                @csrf
+                    <div class="form-group">
+                        <label for="ask_nova">Pregunta/respuesta NOVA</label>
+                        <textarea name="ask_nova" id="ask_nova" >{{$ticket->ask_nova}}</textarea>
+                    </div>
+                    <div class="form-group">
+                        <label for="answer_client">Respuesta Cliente</label>
+                        <textarea name="answer_client" id="answer_client" >{{$ticket->answer_client}}</textarea>
+                    </div>
+                     <div class="form-group">
+                        <label for="adjuntos">Adjuntar Archivos</label>
+                        <input type="file" name="adjuntos[]" id="adjuntos" multiple>
+                    </div>
+                         <button type="submit" class="submit-btn">Guardar</button>
+            </form> 
+                
+
+             
             </div>
-          
+             
+   
+       
+        </div>
+       <div class="form-section">
+            <h3>Archivos adjuntos:</h3>
+
+            @if(!empty($ticket->adjuntos) && is_array(json_decode($ticket->adjuntos, true)) && count(json_decode($ticket->adjuntos, true)) > 0)
+              @foreach(json_decode($ticket->adjuntos, true) as $archivo)
+                @php
+                    $fechaSubida = \Carbon\Carbon::parse($archivo['fecha_subida']);
+                    $diasRestantes = 20 - now()->diffInDays($fechaSubida);
+                @endphp
+
+                @if($diasRestantes > 0)
+                    <div class="archivo-item">
+                        <span class="archivo-nombre">{{ $archivo['nombre'] }}</span>
+                        <small style="color:gray;">Visible por {{ $diasRestantes }} días más</small>
+                        <div>
+                            <a href="{{ route('archivo.descargar', ['nombre' => $archivo['nombre']]) }}" target="_blank" class="archivo-icono">
+                                <i class="fa-solid fa-download" style="color:#8598b1"></i>
+                            </a>
+                            @if(Auth::user()->rol == "admin")
+                            <form action="{{ route('archivo.eliminar', ['ticket' => $ticket->id, 'archivo' => $archivo['nombre']]) }}" method="POST" style="display:inline;">
+                                @csrf
+                                @method('DELETE')
+                                <button type="submit" class="archivo-icono" style="border: none; background: none;" onclick="return confirm('¿Seguro que quieres eliminar este archivo?')">
+                                    <i class="fa-solid fa-trash" style="color:#d9534f;cursor:pointer"></i>
+                                </button>
+                            </form>
+                             @endif
+                        </div>
+                    </div>
+                @endif
+            @endforeach
+
+
+            @else
+                <p>No hay archivos adjuntos.</p>
+            @endif
+        </div>
+
+      </div>
+       <div id="modal-asignar" style="display:none;">
+        <div class="modal-content">
+            <h2>Asignar Usuario</h2>
+            <form id="form-asignar" action="{{ route('interno.asignar') }}" method="POST">
+                @csrf
+                <input type="hidden" id="ticket-id" name="ticket_id">
+                <label for="user-select">Selecciona un usuario:</label>
+                <select id="user-select" name="id_user">
+                    <option value="" label="Selecciona.."></option>
+                </select>
+                <button type="submit">Asignar</button>
+                <button type="button" onclick="closeModal()">Cerrar</button>
+            </form>
         </div>
     </div>
+
+<script>
+    document.querySelectorAll('.btn-asignar').forEach(button => {
+        button.addEventListener('click', function() {
+            const ticketId = this.getAttribute('data-ticket-id');
+            console.log('Ticket ID antes de la llamada:', ticketId); 
+
+            if (!ticketId) {
+                console.error('No se encontró el ID del ticket.');
+                return;
+            }
+
+            document.getElementById('ticket-id').value = ticketId;
+
+            const url = '{{ route("interno.get-users") }}?ticket_id=' + ticketId;
+            console.log('URL de fetch:', url); 
+
+            fetch(url, {
+                method: 'GET',
+                headers: {
+                    'X-CSRF-TOKEN': '{{ csrf_token() }}'
+                }
+            })
+            .then(response => {
+                if (!response.ok) {
+                    throw new Error('Network response was not ok: ' + response.statusText);
+                }
+                return response.json(); 
+            })
+            .then(users => {
+                console.log('Usuarios devueltos:', users); 
+
+                if (!Array.isArray(users)) {
+                    console.error('La respuesta no es un array:', users);
+                    return;
+                }
+
+                const userSelect = document.getElementById('user-select');
+                userSelect.innerHTML = '<option value="" label="Selecciona.."></option>'; 
+
+          
+                users.forEach(user => {
+                    console.log('Usuario:', user);
+                    const option = document.createElement('option');
+                    option.value = user.id; 
+                    option.textContent = user.username;
+                    userSelect.appendChild(option);
+                });
+
+                
+                document.getElementById('modal-asignar').style.display = 'flex';
+            })
+            .catch(error => {
+                console.error('Error:', error); 
+            });
+        });
+    });
+
+
+
+    function closeModal() {
+        document.getElementById('modal-asignar').style.display = 'none';
+    }
+</script>
+
     <style>
+        .archivo-item {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 10px;
+            border-bottom: 1px dashed #ccc;
+            padding-bottom: 5px;
+        }
+
+        .archivo-nombre {
+            flex-grow: 1;
+            overflow: hidden;
+            text-overflow: ellipsis;
+            white-space: nowrap;
+        }
+
+        .archivo-icono {
+            margin-left: 15px;
+            text-decoration: none;
+        }
+
+          #modal-asignar {
+            position: fixed;
+            left: 0;
+            top: 0;
+            width: 100%;
+            height: 100%;
+            background-color: rgba(0, 0, 0, 0.6); 
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            z-index: 999;
+        }
+
+        .modal-content {
+            background-color: #ffffff; 
+            padding: 25px;
+            border-radius: 10px; 
+            width: 90%;
+            max-width: 400px; 
+            box-shadow: 0px 10px 20px rgba(0, 0, 0, 0.2); 
+            text-align: center;
+            animation: fadeIn 0.3s ease-in-out; 
+        }
+
+        .modal-content h2 {
+            font-size: 22px;
+            color: #333;
+            margin-bottom: 20px;
+            font-weight: 600;
+        }
+
+        .modal-content label {
+            display: block;
+            margin-bottom: 8px;
+            font-size: 14px;
+            color: #666;
+        }
+
+        #user-select {
+            width: 100%;
+            padding: 10px;
+            border: 1px solid #ccc;
+            border-radius: 5px;
+            margin-bottom: 20px;
+            font-size: 14px;
+            color: #333;
+        }
+
+        .modal-content button {
+            width: 100%;
+            padding: 10px;
+            margin-top: 10px;
+            border: none;
+            border-radius: 5px;
+            font-size: 16px;
+            cursor: pointer;
+            font-weight: 600;
+            transition: background-color 0.3s ease;
+        }
+
+        .modal-content button[type="submit"] {
+            background-color: #8598b1;
+            color: #ffffff;
+        }
+
+        .modal-content button[type="submit"]:hover {
+            background-color: #b4c3d6;
+        }
+
+        .modal-content button[type="button"] {
+            background-color: #e0e0e0;
+            color: #333;
+        }
+
+        .modal-content button[type="button"]:hover {
+            background-color: #cccccc; 
+        }
+
+
+        @keyframes fadeIn {
+            from {
+                opacity: 0;
+                transform: scale(0.9);
+            }
+            to {
+                opacity: 1;
+                transform: scale(1);
+            }
+        }
+        .asignado{
+            padding:6px;
+            border-radius:6px;
+            border: none; 
+            cursor:pointer;
+   
+        }
+ 
+        .asignado:hover{
+            background-color:white
+        }
+            .sinasignar{
+           border:none;
+           padding:7px;
+           border-radius:5px;
+         cursor:pointer
+        }
+        #download{
+            margin-left:20px;
+        }
         body {
             font-family: "Roboto";
             margin: 0;
@@ -136,6 +426,21 @@
             box-sizing: border-box;
             background-color: #f5f5f5;
         }
+     .submit-btn {
+            background-color: #8598b1;
+            color: white;
+            border: none;
+            float:right;
+            padding: 10px 20px;
+            font-size: 18px;
+            cursor: pointer;
+            border-radius: 5px;
+            transition: background-color 0.3s ease;
+        }
+          .submit-btn:hover {
+            background-color: #b4c3d6;
+        }
+     
         h2{
             text-align:center
         }

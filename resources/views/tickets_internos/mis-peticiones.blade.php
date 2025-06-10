@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>SOLICITUDES TOTALES</title>
+    <title>MIS PETICIONES</title>
     <link rel="shortcut icon" type="image/png" href="{{ asset('/images/icononova.png') }}">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.2/css/all.min.css" integrity="sha512-z3gLpd7yknf1YoNbCzqRKc4qyor8gaKU1qmn+CShxbuBusANI9QpRohGBreCFkKxLhei6S9CQXFEbbKuqLg0DA==" crossorigin="anonymous" referrerpolicy="no-referrer" />
     <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@300&display=swap" rel="stylesheet">
@@ -35,7 +35,7 @@
                 <li class="dropdown">
                     <a href="#"><i class="fa-solid fa-ticket"></i>&nbsp;&nbsp;Tickets Internos </a>
                     <div class="dropdown-content">
-                 <a href="{{ route('interno.mispetis') }}"><i class="fa-solid fa-person-circle-question"></i>&nbsp;Mis Peticiones</a>
+                    <a href="{{ route('interno.mispetis') }}"><i class="fa-solid fa-person-circle-question"></i>&nbsp;Mis Peticiones</a>
                      <a href="{{ route('interno.parami') }}"><i class="fa-solid fa-user-tie"></i>&nbsp;Para mi</a>
                         <a href="{{ route('interno.globales') }}"><i class="fa-solid fa-earth-africa"></i>&nbsp;Totales</a>
                         <a href="{{ route('interno.abiertos') }}"><i class="fa-solid fa-door-open"></i>&nbsp;Abiertos</a>
@@ -65,10 +65,10 @@
 
 
     <div class="container">
-        <h2 style="text-align:center;">Tickets Totales</h2>
-        <form method="GET" action="{{ route('interno.globales') }}">
+        <h2 style="text-align:center;">Mis Peticiones</h2>
+        <form method="GET" action="{{ route('interno.mispetis') }}">
     <div class="filter-container">
-        <input type="text" name="id" placeholder="ID" value="{{ request('id') }}">
+    <input type="text" name="id" placeholder="ID" value="{{ request('id') }}">
         <input type="text" name="para" placeholder="Asignado a" value="{{ request('para') }}">
         <input type="text" name="solicitante" placeholder="Solicitante" value="{{ request('solicitante') }}">        
         <input type="text" name="tipo_solicitud" placeholder="Tipo de solicitud" value="{{ request('tipo_solicitud') }}">
@@ -79,11 +79,10 @@
         <input type="text" name="estado" placeholder="Estado" value="{{ request('estado') }}">
         <input type="date" name="creado" placeholder="Creado" value="{{ request('creado') }}">
         <button type="submit">Filtrar</button>
-        <a href="{{ route('interno.globales') }}"><i class="fa-solid fa-eraser"></i> Limpiar</a>
+        <a href="{{ route('interno.mispetis') }}"><i class="fa-solid fa-eraser"></i> Limpiar</a>
     </div>
 </form>
         <div class="tabla-contenedor">
-   
         <table>
             <thead>
                 <tr>
@@ -107,13 +106,13 @@
                         <td>{{ $ticket->solicitante }}</td>
                         <td>
                         @if ($ticket->usuarioAsignado)
-                        <button type="button" class="btn-asignar asignado" data-ticket-id="{{ $ticket->id }}" >
+
                         <i class="fa-solid fa-user-gear"></i>  {{ $ticket->usuarioAsignado->username }}
-                            </button>
+                        
                         @else
-                            <button type="button" class="btn-asignar sinasignar" data-ticket-id="{{ $ticket->id }}">
+                         
                             Sin Asignar
-                            </button>
+                      
 
                            
                         @endif
@@ -124,12 +123,12 @@
                         <td>{{ $ticket->marca }}</td>
                         <td>{{ $ticket->sede }}</td>
                         <td style="max-width: 150px; overflow: hidden; text-overflow: ellipsis; white-space: nowrap;">{{ $ticket->observaciones}}</td>
-                         @php
+                            @php
                         $creado = \Carbon\Carbon::parse($ticket->creado);
                          @endphp
 
                        
-                       <td> 
+                            <td> 
                         @if($ticket->estado === 'Abierto') 
                             @if ($creado->diffInHours(now()) > 24)
                                 <span style="color:darkgreen;font-weight:bold;cursor:pointer" title="Ticket abierto hace más de 24 horas">
@@ -150,14 +149,7 @@
                             </span> 
                         @endif 
                     </td>
-
-                   
-                    <td>
-                        {{ $creado->format('Y-m-d H:i:s') }}
-                       
-                    </td>
-
-
+                        <td>{{ $ticket->creado}}</td>
                         <td class="acciones">
                             <!-- <a href="{{ route('ver.Editar', $ticket->id) }}" class="icono" title="Editar Ticket"><i class="fa-solid fa-pen-to-square"></i></a>&nbsp;|&nbsp; -->
                             <!-- @if(Auth::user()->rol == "admin")
@@ -170,7 +162,6 @@
                             &nbsp;| -->
                             <a href="{{ route('interno.mostrar', $ticket->id) }}" class="icono"  title="VerTicket"><i class="fa-solid fa-eye"></i></a>
                             
-                            <!-- &nbsp;|&nbsp;<a href="{{ route('interno.cerrar', $ticket->id) }}" class="icono"  title="Cerrar Ticket"><i class="fa-solid fa-door-closed"></i></a> -->
 
                         </td>
 
@@ -179,13 +170,10 @@
                 @endforeach
             </tbody>
         </table>
-        </div>
-        @if ($tickets->isEmpty())
+    </div>
+    @if ($tickets->isEmpty())
             <p class="notickets">No se han encontrado tickets.</p>
         @endif
-    </div>
-    </div>
- 
     </div>
     <div style="display: flex; justify-content: center;">
     {{ $tickets->links() }}
@@ -334,6 +322,12 @@ nav.pagination span,
 nav.pagination a {
     box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
 }
+    .sinasignar{
+           border:none;
+           padding:7px;
+           border-radius:5px;
+         cursor:pointer
+        }
         body {
             font-family: "Roboto";
             margin: 0;
@@ -487,15 +481,6 @@ nav.pagination a {
             border-radius: 8px;
             width: 300px;
             box-shadow: 0px 0px 10px rgba(0, 0, 0, 0.1);
-        }
-        .sinasignar{
-           border:none;
-           padding:7px;
-           border-radius:5px;
-         cursor:pointer
-        }
-        .sinasignar:hover{
-            background-color: white;
         }
         .asignado{
             padding:6px;

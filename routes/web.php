@@ -70,4 +70,9 @@ Route::middleware(['auth'])->group(function () {
     Route::get('/tickets/cerrados-in', [TicketsInternosController::class, 'Cerrados'])->name('interno.cerrados');
     Route::get('/tickets-in/{id}', [TicketController::class, 'mostrarTicketInt'])->name('interno.mostrar');
     Route::get('/tickets/cerrar-in/{id}', [TicketsInternosController::class, 'CerrarTicket'])->name('interno.cerrar');
+    Route::post('/SaveAin/{id}', [TicketsInternosController::class, 'saveAtach'])->name('guardar.atach');
+    Route::get('/descargar/{nombre}', [TicketsInternosController::class, 'descargar'])->name('archivo.descargar');
+    Route::delete('/archivo/eliminar/{ticket}/{archivo}', [TicketsInternosController::class, 'eliminarArchivo'])->name('archivo.eliminar');
+    Route::get('/tickets/mis-peticiones', [TicketsInternosController::class, 'MisPeticiones'])->name('interno.mispetis');
+
 });

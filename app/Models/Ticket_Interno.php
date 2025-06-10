@@ -20,7 +20,10 @@ class Ticket_Interno extends Model
         'estado',
         'creado',
         'asignado',
-        'cerrado'
+        'cerrado',
+        'adjuntos',
+        'answer_client',
+        'ask_nova'
     ];
    protected $table = "tickets_internos";
 

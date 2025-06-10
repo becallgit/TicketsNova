@@ -12,10 +12,72 @@ use App\Models\Asignados_Internos;
 use Illuminate\Support\Facades\Log;
 use Exception;
 use Carbon\Carbon;
+use Illuminate\Support\Facades\File;
+use Illuminate\Support\Facades\Response;
+
 class TicketsInternosController extends Controller
 {
 
+public function saveAtach(Request $request, $id)
+{
+    $ticket = Ticket_Interno::findOrFail($id);
+    $ticket->update([
+        'ask_nova' => $request->ask_nova,
+        'answer_client' => $request->answer_client
+    ]);
 
+    $archivosExistentes = json_decode($ticket->adjuntos, true) ?? [];
+
+    if ($request->hasFile('adjuntos')) {
+        foreach ($request->file('adjuntos') as $archivo) {
+            $nombreArchivo = $archivo->getClientOriginalName();
+            $archivo->storeAs('archivos', $nombreArchivo, 'public');
+
+            $archivosExistentes[] = [
+                'nombre' => $nombreArchivo,
+                'fecha_subida' => now()->toDateTimeString(),
+            ];
+        }
+    }
+
+    $ticket->adjuntos = json_encode($archivosExistentes);
+    $ticket->save();
+
+    return redirect()->back()->with('success', 'Archivos guardados correctamente.');
+}
+
+     public function descargar($nombre)
+    {
+       $ruta = Storage::disk('public')->path('archivos/' . $nombre);
+
+
+        if (!file_exists($ruta)) {
+            abort(404, 'Archivo no encontrado');
+        }
+
+        return response()->download($ruta);
+    }
+  public function eliminarArchivo($ticketId, $archivo)
+{
+    $ticket = Ticket_Interno::findOrFail($ticketId);
+    $adjuntos = json_decode($ticket->adjuntos, true) ?? [];
+
+  $rutaArchivo = Storage::disk('public')->path('archivos/' . $archivo);
+    if (Storage::disk('public')->exists('archivos/' . $archivo)) {
+        Storage::disk('public')->delete('archivos/' . $archivo);
+    }
+
+
+  
+    $adjuntos = array_filter($adjuntos, function ($item) use ($archivo) {
+        return $item['nombre'] !== $archivo;
+    });
+
+    $ticket->adjuntos = json_encode(array_values($adjuntos));
+    $ticket->save();
+
+    return redirect()->back()->with('success', 'Archivo eliminado correctamente.');
+}
     public function Globales(Request $request)
     {
         $username = Auth::user()->username;
@@ -23,7 +85,7 @@ class TicketsInternosController extends Controller
       
         $query = Ticket_Interno::query();
         if ($request->filled('id')) {
-            $query->where('id', $request->input('id')); // ID suele ser exacto
+            $query->where('id', $request->input('id')); 
         }
         
         if ($request->filled('solicitante')) {
@@ -64,6 +126,8 @@ class TicketsInternosController extends Controller
         
      
        
+        $query->orderBy('creado', 'desc');
+
         $tickets = $query->paginate(10);
     
         return view('tickets_internos.globales', compact('username', 'tickets'));
@@ -270,6 +334,7 @@ class TicketsInternosController extends Controller
 
             Ticket_Interno::where('id', $id_ticket)->update([
                 'asignado' => Carbon::now()->format('Y-m-d H:i:s'),
+                'estado'=>"En Curso",
                 'para'=>$username
             ]);
     
@@ -299,4 +364,60 @@ class TicketsInternosController extends Controller
             Log::error('Error al cerrar el ticket  con id: '.$id . "con mensaje" . $e->getMessage());
         }
     }
+
+     public function MisPeticiones(Request $request)
+    {
+           $username = Auth::user()->username;
+    
+         $query= Ticket_Interno::where('solicitante', $username);
+    
+        // Filtros
+        if ($request->filled('id')) {
+            $query->where('id', $request->input('id'));
+        }
+    
+        if ($request->filled('solicitante')) {
+            $query->where('solicitante', 'like', '%' . $request->input('solicitante') . '%');
+        }
+    
+        if ($request->filled('para')) {
+            $query->where('para', 'like', '%' . $request->input('para') . '%');
+        }
+    
+        if ($request->filled('tipo_solicitud')) {
+            $query->where('tipo_solicitud', 'like', '%' . $request->input('tipo_solicitud') . '%');
+        }
+    
+        if ($request->filled('cliente')) {
+            $query->where('cliente', 'like', '%' . $request->input('cliente') . '%');
+        }
+    
+        if ($request->filled('marca')) {
+            $query->where('marca', 'like', '%' . $request->input('marca') . '%');
+        }
+    
+        if ($request->filled('sede')) {
+            $query->where('sede', 'like', '%' . $request->input('sede') . '%');
+        }
+    
+        if ($request->filled('observaciones')) {
+            $query->where('observaciones_ticket', 'like', '%' . $request->input('observaciones') . '%');
+        }
+    
+        if ($request->filled('estado')) {
+            $query->where('estado', 'like', '%' . $request->input('estado') . '%');
+        }
+    
+        if ($request->filled('creado')) {
+            $query->whereDate('creado', '>=', $request->input('creado'));
+        }
+    
+      
+        $tickets = $query->paginate(10); 
+    
+        return view('tickets_internos.mis-peticiones', compact('username', 'tickets'));
+
+         
+    }
+    
 }
