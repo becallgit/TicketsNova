@@ -64,6 +64,31 @@
 
 
     <div class="equipos-container {{ $userRole != 'admin' || (isset($ticketsPorEquipo) && $ticketsPorEquipo->count() == 1) ? 'centrado' : '' }}">
+  @if (Auth::user()->rol == "admin" && Auth::user()->username != 'angel.lopez')
+    @foreach ($ticketsPorEquipo as $equipo)
+        @if ($equipo->nombre == 'Nova') 
+            <div class="equipo nova">
+                <div class="team-title">{{ $equipo->nombre }}</div>
+                <div class="tarjetas-container">
+                    <div class="tarjeta">
+                        <div class="texto">Solicitudes para Tatiana</div>
+                        <div class="numero">{{ $paraTatiana }}</div>
+                    </div>
+                    <div class="tarjeta">
+                        <div class="texto">Solicitudes para Ignacio</div>
+                        <div class="numero">{{ $paraIgnacio }}</div>
+                    </div>
+                    <div class="tarjeta">
+                        <div class="texto">Solicitudes para Inma</div>
+                        <div class="numero">{{ $paraInma}}</div>
+                    </div>
+                </div>
+            </div>
+        @endif
+    @endforeach
+@endif
+  
+  
     @if ($userRole == 'admin')
         @foreach ($ticketsPorEquipo as $equipo)
         @if ($equipo->nombre != 'Nova') 
@@ -100,32 +125,8 @@
             </div>
         </div>
     @endif
-    @if (Auth::user()->rol == "admin" && Auth::user()->username != 'angel.lopez')
-    @foreach ($ticketsPorEquipo as $equipo)
-        @if ($equipo->nombre == 'Nova') 
-      
-            <div class="equipo">
-                <div class="team-title">{{ $equipo->nombre }}</div>
-                <div class="tarjetas-container">
-                    <div class="tarjeta">
-                        <div class="texto">Solicitudes para Tatiana</div>
-                        <div class="numero">{{ $paraTatiana}}</div>
-                    </div>
-                    <div class="tarjeta">
-                        <div class="texto">Solicitudes para Ignacio</div>
-                        <div class="numero">{{ $paraIgnacio}}</div>
-                    </div>
-                   
-                </div>
-             
-          
-                 
-            </div>
-          
-            @endif
-     @endforeach
-        @endif
-    
+  
+
 </div>
 
 
@@ -301,6 +302,22 @@
         padding: 8px 12px;
         border-radius: 8px;
     }
+.equipo.nova {
+    grid-column: span 2; /* ocupa las 2 columnas en grid */
+    background-color:rgb(248, 248, 248);
+    border: 2px solid rgb(243, 244, 245);
+    max-width: none;
+    width: 100%;
+}
+
+.equipo.nova .tarjetas-container {
+    flex-wrap: wrap;
+    justify-content: space-evenly;
+}
+
+.equipo.nova .tarjeta {
+    max-width: 180px;
+}
 
     .equipos-container.centrado {
     display: flex;
