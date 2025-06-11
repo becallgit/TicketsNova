@@ -51,7 +51,10 @@ class DashboardController extends Controller
         $paraIgnacio = Ticket_Interno::where('estado', 'Abierto')
         ->where('para', 'ignaciof.caravia')
         ->count();
-        return view('dashboard', compact('paraTatiana','paraIgnacio','username', 'userRole', 'ticketsPorEquipo', 'ticketsAbiertos', 'ticketsSinAsignar', 'teamName'));
+          $paraInma = Ticket_Interno::where('estado', 'Abierto')
+        ->where('para', 'inma.salguero')
+        ->count();
+        return view('dashboard', compact('paraTatiana','paraIgnacio','paraInma','username', 'userRole', 'ticketsPorEquipo', 'ticketsAbiertos', 'ticketsSinAsignar', 'teamName'));
     }
     
 
