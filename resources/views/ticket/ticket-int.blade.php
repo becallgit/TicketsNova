@@ -111,8 +111,13 @@
                            
                         @endif
                     @else
+                     @if ($ticket->usuarioAsignado)
                     <input type="text" value ="{{ $ticket->usuarioAsignado->username }}">
-                        
+                        @else
+                         
+                            Sin Asignar
+                            
+                        @endif
                     @endif
                 </div>
                 <div class="form-group">
