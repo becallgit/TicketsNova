@@ -43,7 +43,7 @@ class TicketController extends Controller
             $ticket->observaciones = $request->input('observaciones');
             $ticket->estado = "Abierto";
             $ticket->creado = Carbon::now()->format('Y-m-d H:i:s');
-            $ticket->asignado = Carbon::now()->format('Y-m-d H:i:s');
+         
             $ticket->save();
 
        
