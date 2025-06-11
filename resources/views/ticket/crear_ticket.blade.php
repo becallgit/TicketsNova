@@ -56,7 +56,7 @@
             <li class="dropdown">
                 <a href="#"><i class="fa-solid fa-user-astronaut"></i>&nbsp;&nbsp;{{$username}}</a>
                 <div class="dropdown-content">
-                    <a href="#">Ajustes</a>
+                 
                     <a href="{{ route('signout') }}"><i class="fa-solid fa-power-off"></i> Cerrar Sesión</a>
                 </div>
             </li>
