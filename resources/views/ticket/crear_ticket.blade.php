@@ -82,10 +82,21 @@
             <label for="cliente">Cliente</label>
             <select id="cliente" name="cliente">
                 <option value="" disabled selected>Selecciona...</option>
-                <option value="Dismoauto">Dismoauto</option>
-                <option value="Riscal">Riscal</option>
-                <option value="Vera Import">Vera Import</option>
-            </select>
+                @if (Auth::user()->team_id == 1)
+                     <option value="Dismoauto" selected>Dismoauto</option>
+                @endif
+                  @if (Auth::user()->team_id == 3)
+                     <option value="Riscal" selected>Riscal</option>
+                @endif
+                 @if (Auth::user()->team_id == 2)
+                   <option value="Vera Import" selected>Vera Import</option>
+                @endif
+                 @if (Auth::user()->rol== "admin")
+                  <option value="Dismoauto">Dismoauto</option>
+                   <option value="Riscal">Riscal</option>
+                    <option value="Vera Import">Vera Import</option>
+                @endif
+                </select>
         </div>
 
         <div class="form-group">
@@ -159,6 +170,72 @@
             });
         }
     });
+clienteSelect.addEventListener("change", function () {
+    const selectedCliente = this.value;
+
+    // Actualizar marcas
+    marcaSelect.innerHTML = '<option value="" disabled selected>Selecciona...</option>';
+    if (marcaOptions[selectedCliente]) {
+        marcaOptions[selectedCliente].forEach(marca => {
+            const option = document.createElement("option");
+            option.value = marca;
+            option.textContent = marca;
+            marcaSelect.appendChild(option);
+        });
+    }
+
+    // Limpiar sedes (aún no seleccionamos marca)
+    sedeSelect.innerHTML = '<option value="" disabled selected>Selecciona...</option>';
+
+    // Si cliente NO es Vera Import, cargamos todas las sedes disponibles para el cliente
+    if (selectedCliente !== "Vera Import") {
+        if (sedeOptions[selectedCliente]) {
+            sedeOptions[selectedCliente].forEach(sede => {
+                const option = document.createElement("option");
+                option.value = sede;
+                option.textContent = sede;
+                sedeSelect.appendChild(option);
+            });
+        }
+    }
+});
+
+
+marcaSelect.addEventListener("change", function () {
+    const selectedMarca = this.value;
+    const selectedCliente = clienteSelect.value;
+
+    sedeSelect.innerHTML = '<option value="" disabled selected>Selecciona...</option>';
+
+    if (selectedCliente === "Vera Import") {
+        let sedes = [];
+        if (selectedMarca === "Volkswagen" || selectedMarca === "Comerciales" || selectedMarca === "Audi") {
+            sedes = ["El Ejido", "Vera", "Huércal de Almería"];
+        } else if (selectedMarca === "Seat" || selectedMarca === "Cupra") {
+            sedes = ["Vera", "Albox"];
+        } else if (selectedMarca === "Skoda") {
+            sedes = ["Vera"];
+        }
+
+        sedes.forEach(sede => {
+            const option = document.createElement("option");
+            option.value = sede;
+            option.textContent = sede;
+            sedeSelect.appendChild(option);
+        });
+    } else {
+ 
+        sedeSelect.innerHTML = '<option value="" disabled selected>Selecciona cliente primero</option>';
+    }
+});
+
+window.addEventListener("DOMContentLoaded", function () {
+    const selectedCliente = clienteSelect.value;
+    if (selectedCliente) {
+        clienteSelect.dispatchEvent(new Event("change"));
+    }
+});
+
 </script>
 
     <style>
