@@ -149,15 +149,42 @@
     clienteSelect.addEventListener("change", function () {
         const selectedCliente = this.value;
 
-        marcaSelect.innerHTML = '<option value="" disabled selected>Selecciona...</option>';
-        if (marcaOptions[selectedCliente]) {
-            marcaOptions[selectedCliente].forEach(marca => {
-                const option = document.createElement("option");
-                option.value = marca;
-                option.textContent = marca;
-                marcaSelect.appendChild(option);
-            });
+       marcaSelect.addEventListener("change", function () {
+    const selectedMarca = this.value;
+    const selectedCliente = clienteSelect.value;
+
+    sedeSelect.innerHTML = '<option value="" disabled selected>Selecciona...</option>';
+
+    if (selectedCliente === "Vera Import") {
+        let sedes = [];
+        if (selectedMarca === "Volkswagen" || selectedMarca === "Comerciales" || selectedMarca === "Audi") {
+            sedes = ["El Ejido", "Vera", "Huércal de Almería"];
+        } else if (selectedMarca === "Seat" || selectedMarca === "Cupra") {
+            sedes = ["Vera", "Albox"];
+        } else if (selectedMarca === "Skoda") {
+            sedes = ["Vera"];
         }
+
+        sedes.forEach(sede => {
+            const option = document.createElement("option");
+            option.value = sede;
+            option.textContent = sede;
+            sedeSelect.appendChild(option);
+        });
+    } else if (selectedCliente === "Dismoauto" && selectedMarca === "Skoda") {
+        const option = document.createElement("option");
+        option.value = "Málaga";
+        option.textContent = "Málaga";
+        sedeSelect.appendChild(option);
+    } else if (selectedCliente === "Riscal" && ["Audi", "Volkswagen", "Otras marcas"].includes(selectedMarca)) {
+        const option = document.createElement("option");
+        option.value = "Alcorcón";
+        option.textContent = "Alcorcón";
+        sedeSelect.appendChild(option);
+    } else {
+        sedeSelect.innerHTML = '<option value="" disabled selected>No hay sedes disponibles</option>';
+    }
+});
 
        
         sedeSelect.innerHTML = '<option value="" disabled selected>Selecciona...</option>';
