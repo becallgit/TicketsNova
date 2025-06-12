@@ -78,21 +78,30 @@
                     <option value="Consulta">Consulta</option>
                 </select>
             </div>
-            <div class="form-group">
-                <label for="cliente">Cliente</label>
-                <input type="text" id="cliente" name="cliente"  >
+         <div class="form-group">
+            <label for="cliente">Cliente</label>
+            <select id="cliente" name="cliente">
+                <option value="" disabled selected>Selecciona...</option>
+                <option value="Dismoauto">Dismoauto</option>
+                <option value="Riscal">Riscal</option>
+                <option value="Vera Import">Vera Import</option>
+            </select>
+        </div>
 
-            </div>
-            <div class="form-group">
-                <label for="marca">Marca</label>
-                <input type="text" id="marca" name="marca" >
+        <div class="form-group">
+            <label for="marca">Marca</label>
+            <select id="marca" name="marca">
+                <option value="" disabled selected>Selecciona cliente primero</option>
+            </select>
+        </div>
 
-            </div>
-            <div class="form-group">
-                <label for="sede">Sede</label>
-                <input type="text" id="sede" name="sede"  >
+        <div class="form-group">
+            <label for="sede">Sede</label>
+            <select id="sede" name="sede">
+                <option value="" disabled selected>Selecciona cliente primero</option>
+            </select>
+        </div>
 
-            </div>
        
             <div class="form-group">
                 <label for="observaciones">Observaciones</label>
@@ -109,6 +118,48 @@
         </div>
     </div>
     </form>
+<script>
+    const marcaOptions = {
+        "Dismoauto": ["Skoda"],
+        "Riscal": ["Audi", "Volkswagen", "Otras marcas"],
+        "Vera Import": ["Volkswagen", "Audi", "Seat", "Cupra", "Skoda", "Comerciales"]
+    };
+
+    const sedeOptions = {
+        "Dismoauto": ["Málaga"],
+        "Riscal": ["Alcorcón"],
+        "Vera Import": ["El Ejido", "Vera", "Huércal de Almería", "Albox"]
+    };
+
+    const clienteSelect = document.getElementById("cliente");
+    const marcaSelect = document.getElementById("marca");
+    const sedeSelect = document.getElementById("sede");
+
+    clienteSelect.addEventListener("change", function () {
+        const selectedCliente = this.value;
+
+        marcaSelect.innerHTML = '<option value="" disabled selected>Selecciona...</option>';
+        if (marcaOptions[selectedCliente]) {
+            marcaOptions[selectedCliente].forEach(marca => {
+                const option = document.createElement("option");
+                option.value = marca;
+                option.textContent = marca;
+                marcaSelect.appendChild(option);
+            });
+        }
+
+       
+        sedeSelect.innerHTML = '<option value="" disabled selected>Selecciona...</option>';
+        if (sedeOptions[selectedCliente]) {
+            sedeOptions[selectedCliente].forEach(sede => {
+                const option = document.createElement("option");
+                option.value = sede;
+                option.textContent = sede;
+                sedeSelect.appendChild(option);
+            });
+        }
+    });
+</script>
 
     <style>
         body {
