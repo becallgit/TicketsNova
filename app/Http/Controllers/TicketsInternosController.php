@@ -128,7 +128,7 @@ public function saveAtach(Request $request, $id)
        
         $query->orderBy('creado', 'desc');
 
-        $tickets = $query->paginate(10);
+        $tickets = $query->paginate(10)->appends($request->all());
     
         return view('tickets_internos.globales', compact('username', 'tickets'));
     }
@@ -181,7 +181,7 @@ public function saveAtach(Request $request, $id)
             $query->where('estado', 'like', '%' . $request->input('estado') . '%');
         }
         
-        $tickets = $query->paginate(10);
+        $tickets = $query->paginate(10)->appends($request->all());
     
         return view('tickets_internos.abiertas', compact('username', 'tickets'));
     }
@@ -231,7 +231,7 @@ public function saveAtach(Request $request, $id)
         }
     
     
-        $tickets = $query->paginate(10);
+        $tickets = $query->paginate(10)->appends($request->all());
     
         return view('tickets_internos.cerradas', compact('username', 'tickets'));
     }
@@ -289,7 +289,7 @@ public function saveAtach(Request $request, $id)
         }
     
       
-        $tickets = $query->paginate(10); 
+        $tickets = $query->paginate(10)->appends($request->all());
     
         return view('tickets_internos.parami', compact('username', 'tickets'));
     }
@@ -416,7 +416,8 @@ public function saveAtach(Request $request, $id)
         }
     
       
-        $tickets = $query->paginate(10); 
+        $tickets = $query->paginate(10)->appends($request->all());
+
     
         return view('tickets_internos.mis-peticiones', compact('username', 'tickets'));
 

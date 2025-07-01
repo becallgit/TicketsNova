@@ -78,7 +78,7 @@
         <input type="text" name="sede" placeholder="Sede" value="{{ request('sede') }}">
         <input type="text" name="observaciones" placeholder="Observaciones" value="{{ request('observaciones') }}">
          <select name="estado">
-            <option value="" label="Selecciona..."></option>
+            <option value="" label="Selecciona Estado..."></option>
             <option value="Abierto">Abierto</option>
             <option value="En Curso">En Curso</option>
             <option value="Cerrado">Cerrado</option>

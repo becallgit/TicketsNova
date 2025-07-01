@@ -91,10 +91,14 @@
                  @if (Auth::user()->team_id == 2)
                    <option value="Vera Import" selected>Vera Import</option>
                 @endif
+                 @if (Auth::user()->team_id == 5)
+                   <option value="Aldauto" selected>Aldauto</option>
+                @endif
                  @if (Auth::user()->rol== "admin")
                   <option value="Dismoauto">Dismoauto</option>
                    <option value="Riscal">Riscal</option>
                     <option value="Vera Import">Vera Import</option>
+                    <option value="Aldauto">Aldauto</option>
                 @endif
                 </select>
         </div>
@@ -130,78 +134,29 @@
     </div>
     </form>
 <script>
-    const marcaOptions = {
-        "Dismoauto": ["Skoda"],
-        "Riscal": ["Audi", "Volkswagen", "Otras marcas"],
-        "Vera Import": ["Volkswagen", "Audi", "Seat", "Cupra", "Skoda", "Comerciales"]
-    };
+  const marcaOptions = {
+    "Dismoauto": ["Skoda"],
+    "Riscal": ["Audi", "Volkswagen", "Otras marcas"],
+    "Vera Import": ["Volkswagen", "Audi", "Seat", "Cupra", "Skoda", "Comerciales"],
+    "Aldauto": ["Skoda"]
+};
 
-    const sedeOptions = {
-        "Dismoauto": ["Málaga"],
-        "Riscal": ["Alcorcón"],
-        "Vera Import": ["El Ejido", "Vera", "Huércal de Almería", "Albox"]
-    };
+const sedeOptions = {
+    "Dismoauto": ["Málaga"],
+    "Riscal": ["Alcorcón"],
+    "Vera Import": ["El Ejido", "Vera", "Huércal de Almería", "Albox"],
+    "Aldauto": ["Alcobendas","Colmenar Viejo"],
+};
 
-    const clienteSelect = document.getElementById("cliente");
-    const marcaSelect = document.getElementById("marca");
-    const sedeSelect = document.getElementById("sede");
+const clienteSelect = document.getElementById("cliente");
+const marcaSelect = document.getElementById("marca");
+const sedeSelect = document.getElementById("sede");
 
-    clienteSelect.addEventListener("change", function () {
-        const selectedCliente = this.value;
-
-       marcaSelect.addEventListener("change", function () {
-    const selectedMarca = this.value;
-    const selectedCliente = clienteSelect.value;
-
-    sedeSelect.innerHTML = '<option value="" disabled selected>Selecciona...</option>';
-
-    if (selectedCliente === "Vera Import") {
-        let sedes = [];
-        if (selectedMarca === "Volkswagen" || selectedMarca === "Comerciales" || selectedMarca === "Audi") {
-            sedes = ["El Ejido", "Vera", "Huércal de Almería"];
-        } else if (selectedMarca === "Seat" || selectedMarca === "Cupra") {
-            sedes = ["Vera", "Albox"];
-        } else if (selectedMarca === "Skoda") {
-            sedes = ["Vera"];
-        }
-
-        sedes.forEach(sede => {
-            const option = document.createElement("option");
-            option.value = sede;
-            option.textContent = sede;
-            sedeSelect.appendChild(option);
-        });
-    } else if (selectedCliente === "Dismoauto" && selectedMarca === "Skoda") {
-        const option = document.createElement("option");
-        option.value = "Málaga";
-        option.textContent = "Málaga";
-        sedeSelect.appendChild(option);
-    } else if (selectedCliente === "Riscal" && ["Audi", "Volkswagen", "Otras marcas"].includes(selectedMarca)) {
-        const option = document.createElement("option");
-        option.value = "Alcorcón";
-        option.textContent = "Alcorcón";
-        sedeSelect.appendChild(option);
-    } else {
-        sedeSelect.innerHTML = '<option value="" disabled selected>No hay sedes disponibles</option>';
-    }
-});
-
-       
-        sedeSelect.innerHTML = '<option value="" disabled selected>Selecciona...</option>';
-        if (sedeOptions[selectedCliente]) {
-            sedeOptions[selectedCliente].forEach(sede => {
-                const option = document.createElement("option");
-                option.value = sede;
-                option.textContent = sede;
-                sedeSelect.appendChild(option);
-            });
-        }
-    });
 clienteSelect.addEventListener("change", function () {
     const selectedCliente = this.value;
 
     // Actualizar marcas
-    marcaSelect.innerHTML = '<option value="" disabled selected>Selecciona...</option>';
+    marcaSelect.innerHTML = '<option value="" disabled>Selecciona...</option>';
     if (marcaOptions[selectedCliente]) {
         marcaOptions[selectedCliente].forEach(marca => {
             const option = document.createElement("option");
@@ -211,50 +166,64 @@ clienteSelect.addEventListener("change", function () {
         });
     }
 
-    // Limpiar sedes (aún no seleccionamos marca)
-    sedeSelect.innerHTML = '<option value="" disabled selected>Selecciona...</option>';
-
-    // Si cliente NO es Vera Import, cargamos todas las sedes disponibles para el cliente
-    if (selectedCliente !== "Vera Import") {
-        if (sedeOptions[selectedCliente]) {
-            sedeOptions[selectedCliente].forEach(sede => {
-                const option = document.createElement("option");
-                option.value = sede;
-                option.textContent = sede;
-                sedeSelect.appendChild(option);
-            });
-        }
+    // Si Aldauto, seleccionar Skoda por defecto en marca
+    if (selectedCliente === "Aldauto") {
+        marcaSelect.value = "Skoda";
+    } else {
+        // Deseleccionar para otros clientes (que quede en el placeholder)
+        marcaSelect.selectedIndex = 0;
     }
+
+    // Actualizar sedes dependiendo del cliente y marca
+    actualizarSedes(selectedCliente, marcaSelect.value);
 });
 
-
 marcaSelect.addEventListener("change", function () {
-    const selectedMarca = this.value;
     const selectedCliente = clienteSelect.value;
+    const selectedMarca = this.value;
+    actualizarSedes(selectedCliente, selectedMarca);
+});
 
+function actualizarSedes(cliente, marca) {
     sedeSelect.innerHTML = '<option value="" disabled selected>Selecciona...</option>';
 
-    if (selectedCliente === "Vera Import") {
+    if (cliente === "Vera Import") {
         let sedes = [];
-        if (selectedMarca === "Volkswagen" || selectedMarca === "Comerciales" || selectedMarca === "Audi") {
+        if (["Volkswagen", "Comerciales", "Audi"].includes(marca)) {
             sedes = ["El Ejido", "Vera", "Huércal de Almería"];
-        } else if (selectedMarca === "Seat" || selectedMarca === "Cupra") {
+        } else if (["Seat", "Cupra"].includes(marca)) {
             sedes = ["Vera", "Albox"];
-        } else if (selectedMarca === "Skoda") {
+        } else if (marca === "Skoda") {
             sedes = ["Vera"];
         }
-
         sedes.forEach(sede => {
             const option = document.createElement("option");
             option.value = sede;
             option.textContent = sede;
             sedeSelect.appendChild(option);
         });
+    } else if (cliente === "Dismoauto" && marca === "Skoda") {
+        const option = document.createElement("option");
+        option.value = "Málaga";
+        option.textContent = "Málaga";
+        sedeSelect.appendChild(option);
+    } else if (cliente === "Riscal" && ["Audi", "Volkswagen", "Otras marcas"].includes(marca)) {
+        const option = document.createElement("option");
+        option.value = "Alcorcón";
+        option.textContent = "Alcorcón";
+        sedeSelect.appendChild(option);
+    } else if (cliente === "Aldauto") {
+      
+        sedeOptions["Aldauto"].forEach(sede => {
+            const option = document.createElement("option");
+            option.value = sede;
+            option.textContent = sede;
+            sedeSelect.appendChild(option);
+        });
     } else {
- 
-        sedeSelect.innerHTML = '<option value="" disabled selected>Selecciona cliente primero</option>';
+        sedeSelect.innerHTML = '<option value="" disabled selected>No hay sedes disponibles</option>';
     }
-});
+}
 
 window.addEventListener("DOMContentLoaded", function () {
     const selectedCliente = clienteSelect.value;
