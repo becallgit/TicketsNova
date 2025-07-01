@@ -77,7 +77,12 @@
         <input type="text" name="marca" placeholder="Marca" value="{{ request('marca') }}">
         <input type="text" name="sede" placeholder="Sede" value="{{ request('sede') }}">
         <input type="text" name="observaciones" placeholder="Observaciones" value="{{ request('observaciones') }}">
-        <input type="text" name="estado" placeholder="Estado" value="{{ request('estado') }}">
+        < <select name="estado">
+            <option value="" label="Selecciona Estado..."></option>
+            <option value="Abierto">Abierto</option>
+            <option value="En Curso">En Curso</option>
+            <option value="Cerrado">Cerrado</option>
+        </select>
         <input type="date" name="creado" placeholder="Creado" value="{{ request('creado') }}">
         <button type="submit">Filtrar</button>
         <a href="{{ route('interno.globales') }}"><i class="fa-solid fa-eraser"></i> Limpiar</a>
@@ -638,7 +643,7 @@ nav.pagination a {
             box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
         }
 
-        .filter-container input[type="text"], .filter-container input[type="date"], .filter-container button {
+        .filter-container input[type="text"], .filter-container input[type="date"], .filter-container button, .filter-container select {
             padding: 10px;
             border: 1px solid #ddd;
             border-radius: 5px;

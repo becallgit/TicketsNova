@@ -101,7 +101,10 @@ class TicketController extends Controller
             return $query->where('observaciones_ticket', 'like', "%{$observaciones_ticket}%");
         })->when($request->creado, function ($query, $creado) {
             return $query->where('creado', 'like', "%{$creado}%");
+        })->when($request->estado, function ($query, $estado) {
+            return $query->where('estado', 'like', "%{$estado}%");
         });
+    
     
    
         $tickets->orderBy('creado', 'desc');
@@ -123,7 +126,7 @@ class TicketController extends Controller
         $tickets = Ticket::query();
     
        
-        $tickets->where('estado', 'Abierto');
+       $tickets->whereIn('estado', ['Abierto', 'En Curso']);
     
         $tickets->when($request->id, function ($query, $id) {
             return $query->where('id', $id);
@@ -147,6 +150,8 @@ class TicketController extends Controller
             return $query->where('observaciones_ticket', 'like', "%{$observaciones_ticket}%");
         })->when($request->creado, function ($query, $creado) {
             return $query->where('creado', 'like', "%{$creado}%");
+        })->when($request->estado, function ($query, $estado) {
+            return $query->where('estado', 'like', "%{$estado}%");
         });
     
         $tickets->orderBy('creado', 'desc');
@@ -193,6 +198,8 @@ class TicketController extends Controller
             return $query->where('observaciones_ticket', 'like', "%{$observaciones_ticket}%");
         })->when($request->creado, function ($query, $creado) {
             return $query->where('creado', 'like', "%{$creado}%");
+        })->when($request->estado, function ($query, $estado) {
+            return $query->where('estado', 'like', "%{$estado}%");
         });
         
         $tickets->orderBy('creado', 'desc');
@@ -456,7 +463,9 @@ public function MostrarDismoauto(Request $request, $team_id){
         return $query->where('observaciones_ticket', 'like', "%{$observaciones_ticket}%");
     })->when($request->creado, function ($query, $creado) {
         return $query->where('creado', 'like', "%{$creado}%");
-    });
+    })->when($request->estado, function ($query, $estado) {
+            return $query->where('estado', 'like', "%{$estado}%");
+        });
 
 
 

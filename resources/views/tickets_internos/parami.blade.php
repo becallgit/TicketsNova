@@ -77,7 +77,12 @@
         <input type="text" name="marca" placeholder="Marca" value="{{ request('marca') }}">
         <input type="text" name="sede" placeholder="Sede" value="{{ request('sede') }}">
         <input type="text" name="observaciones" placeholder="Observaciones" value="{{ request('observaciones') }}">
-        <input type="text" name="estado" placeholder="Estado" value="{{ request('estado') }}">
+         <select name="estado">
+            <option value="" label="Selecciona Estado..."></option>
+            <option value="Abierto">Abierto</option>
+            <option value="En Curso">En Curso</option>
+            <option value="Cerrado">Cerrado</option>
+        </select>
         <input type="date" name="creado" placeholder="Creado" value="{{ request('creado') }}">
         <button type="submit">Filtrar</button>
         <a href="{{ route('interno.parami') }}"><i class="fa-solid fa-eraser"></i> Limpiar</a>
@@ -161,6 +166,9 @@
                             </form>
                             @endif
                             &nbsp;| -->
+                                @if ($ticket->answer_client)
+                             <a href="{{ route('interno.mostrar', $ticket->id) }}"  class="iconoC"  title="Ticket con conversación">   <i class="fa-solid fa-comments"  style="cursor:pointer"></i>&nbsp;|
+                            @endif
                             <a href="{{ route('interno.mostrar', $ticket->id) }}" class="icono"  title="VerTicket"><i class="fa-solid fa-eye"></i></a>&nbsp;|&nbsp;
                             
                             <a href="{{ route('interno.cerrar', $ticket->id) }}" class="icono"  title="Cerrar Ticket"><i class="fa-solid fa-door-closed"></i></a>
@@ -491,6 +499,16 @@ nav.pagination a {
             cursor:pointer;
    
         }
+         .iconoC {
+            color: black;
+            font-size: 15px; 
+            text-decoration: none; 
+            transition: color 0.3s ease; 
+        }
+
+        .iconoC:hover {
+            color:rgb(105, 105, 105)
+        }
         .asignado:hover{
             background-color:white
         }
@@ -624,7 +642,7 @@ nav.pagination a {
             box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
         }
 
-        .filter-container input[type="text"], .filter-container input[type="date"], .filter-container button {
+        .filter-container input[type="text"], .filter-container input[type="date"], .filter-container button , .filter-container select {
             padding: 10px;
             border: 1px solid #ddd;
             border-radius: 5px;

@@ -30,31 +30,36 @@ class DashboardController extends Controller
         if ($userRole == 'admin') {
             $ticketsPorEquipo = Team::withCount([
                 'tickets as tickets_abiertos' => function ($query) {
-                    $query->where('estado', 'Abierto');
+                    $query->whereIn('estado', ['Abierto', 'En Curso']);
+
                 },
                 'tickets as tickets_sin_asignar' => function ($query) use ($assignedTicketIds) {
                     $query->whereNotIn('id', $assignedTicketIds);
                 }
             ])->get();
         } else {
-            $ticketsAbiertos = Ticket::where('estado', 'Abierto')
-                                      ->where('team_id', $userTeamId)
-                                      ->count();
+            $ticketsAbiertos = Ticket::whereIn('estado', ['Abierto', 'En Curso'])
+                        ->where('team_id', $userTeamId)
+                        ->count();
+
             $ticketsSinAsignar = Ticket::whereNotIn('id', $assignedTicketIds)
                                         ->where('team_id', $userTeamId)
                                         ->count();
             $teamName = Team::where('id', $userTeamId)->value('nombre'); 
         }
-        $paraTatiana = Ticket_Interno::where('estado', 'Abierto')
+        $paraTatiana = Ticket_Interno::where('estado', 'En Curso')
         ->where('para', 'tatiana.pizarro')
         ->count();
-        $paraIgnacio = Ticket_Interno::where('estado', 'Abierto')
+        $paraIgnacio = Ticket_Interno::where('estado', 'En Curso')
         ->where('para', 'ignaciof.caravia')
         ->count();
-          $paraInma = Ticket_Interno::where('estado', 'Abierto')
+          $paraInma = Ticket_Interno::where('estado', 'En Curso')
         ->where('para', 'inma.salguero')
         ->count();
-        return view('dashboard', compact('paraTatiana','paraIgnacio','paraInma','username', 'userRole', 'ticketsPorEquipo', 'ticketsAbiertos', 'ticketsSinAsignar', 'teamName'));
+         $abiertos = Ticket_Interno::where('estado', 'Abierto')
+        
+        ->count();
+        return view('dashboard', compact('abiertos','paraTatiana','paraIgnacio','paraInma','username', 'userRole', 'ticketsPorEquipo', 'ticketsAbiertos', 'ticketsSinAsignar', 'teamName'));
     }
     
 

@@ -71,6 +71,10 @@
                 <div class="team-title">{{ $equipo->nombre }}</div>
                 <div class="tarjetas-container">
                     <div class="tarjeta">
+                        <div class="texto">Solicitudes Abiertas</div>
+                        <div class="numero">{{ $abiertos}}</div>
+                    </div>
+                    <div class="tarjeta">
                         <div class="texto">Solicitudes para Tatiana</div>
                         <div class="numero">{{ $paraTatiana }}</div>
                     </div>
@@ -82,6 +86,7 @@
                         <div class="texto">Solicitudes para Inma</div>
                         <div class="numero">{{ $paraInma}}</div>
                     </div>
+                 
                 </div>
             </div>
         @endif

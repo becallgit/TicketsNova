@@ -78,6 +78,12 @@
         <input type="text" name="bastidor" placeholder="Bastidor" value="{{ request('bastidor') }}">
         <input type="text" name="observaciones_ticket" placeholder="Observaciones" value="{{ request('obserbaciones_ticket') }}">
         <input type="date" name="creado" placeholder="Fecha de creacion" value="{{ request('creado') }}">
+        <select name="estado">
+            <option value="" label="Selecciona Estado..."></option>
+            <option value="Abierto">Abierto</option>
+            <option value="En Curso">En Curso</option>
+            <option value="Cerrado">Cerrado</option>
+        </select>
         <button type="submit">Filtrar</button>
         <a href="{{ route('vista-solit-global') }}"><i class="fa-solid fa-eraser"></i> Limpiar</a>
     </div>
@@ -635,7 +641,7 @@ nav.pagination a {
             box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
         }
 
-        .filter-container input[type="text"], .filter-container input[type="date"], .filter-container button {
+        .filter-container input[type="text"], .filter-container input[type="date"], .filter-container button,.filter-container select {
             padding: 10px;
             border: 1px solid #ddd;
             border-radius: 5px;

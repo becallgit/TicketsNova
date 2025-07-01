@@ -31,19 +31,21 @@
                 <li class="dropdown">
                     <a href="{{ route('vista-missolicitudes') }}"><i class="fa-solid fa-check-to-slot"></i>&nbsp;&nbsp;Mis Solicitudes</a>
                 </li>
-              
-                @if (Auth::user()->rol == "admin" && Auth::user()->username != 'angel.lopez')
+                @if (Auth::user()->create_ticket == 1)
                 <li class="dropdown">
                     <a href="#"><i class="fa-solid fa-ticket"></i>&nbsp;&nbsp;Tickets Internos </a>
                     <div class="dropdown-content">
-                     <a href="{{ route('interno.parami') }}"><i class="fa-solid fa-user-tie"></i>&nbsp;Para mi</a>
+                         <a href="{{ route('interno.mispetis') }}"><i class="fa-solid fa-person-circle-question"></i>&nbsp;Mis Peticiones</a>
+                    @if (Auth::user()->rol == "admin" && Auth::user()->username != 'angel.lopez')
+                         <a href="{{ route('interno.parami') }}"><i class="fa-solid fa-user-tie"></i>&nbsp;Para mi</a>
                         <a href="{{ route('interno.globales') }}"><i class="fa-solid fa-earth-africa"></i>&nbsp;Totales</a>
                         <a href="{{ route('interno.abiertos') }}"><i class="fa-solid fa-door-open"></i>&nbsp;Abiertos</a>
-                        <a href="{{ route('interno.cerrados') }}"><i class="fa-solid fa-door-closed"></i>&nbsp;Cerradas</a>
-    
+                        <a href="{{ route('interno.cerrados') }}"><i class="fa-solid fa-door-closed"></i>&nbsp;Cerrados</a>
+                    @endif
                     </div>
                 </li>
-                @endif
+              @endif
+               
             </ul>
         </div>
 
@@ -75,6 +77,12 @@
         <input type="text" name="bastidor" placeholder="Bastidor" value="{{ request('bastidor') }}">
         <input type="text" name="observaciones_ticket" placeholder="Observaciones" value="{{ request('obserbaciones_ticket') }}">
         <input type="date" name="creado" placeholder="Fecha de creacion" value="{{ request('creado') }}">
+         <select name="estado">
+            <option value="" label="Selecciona Estado..."></option>
+            <option value="Abierto">Abierto</option>
+            <option value="En Curso">En Curso</option>
+            <option value="Cerrado">Cerrado</option>
+        </select>
         <button type="submit">Filtrar</button>
         <a href="{{ route('ver.accesoDirecto',$team_id) }}"><i class="fa-solid fa-eraser"></i> Limpiar</a>
     </div>
@@ -119,16 +127,32 @@
                         <td>{{ $ticket->matricula }}</td>
                         <td>{{ $ticket->bastidor }}</td>
                         <td style="max-width: 150px; overflow: hidden; text-overflow: ellipsis; white-space: nowrap;">{{ $ticket->observaciones_ticket}}</td>
-                        <td>
+                           @php
+                        $creado = \Carbon\Carbon::parse($ticket->creado);
+                         @endphp
+
+                       
+                          <td> 
                         @if($ticket->estado === 'Abierto') 
-                        <span  style="color:green;font-weight:bold"><i class="fa-regular fa-circle"></i>&nbsp;&nbsp;{{$ticket->estado}}</span>
+                            @if ($creado->diffInHours(now()) > 24)
+                                <span style="color:darkgreen;font-weight:bold;cursor:pointer" title="Ticket abierto hace más de 24 horas">
+                                    <i class="fa-solid fa-triangle-exclamation"></i>&nbsp;&nbsp;{{ $ticket->estado }}
+                                </span>
+                            @else
+                                <span style="color:green;font-weight:bold">
+                                    <i class="fa-regular fa-circle"></i>&nbsp;&nbsp;{{ $ticket->estado }}
+                                </span>
+                            @endif
                         @elseif($ticket->estado === 'Cerrado') 
-                            <span style="color:grey;font-weight:bold"><i class="fa-solid fa-circle-xmark"></i>&nbsp;&nbsp;{{$ticket->estado}}</span> 
+                            <span style="color:grey;font-weight:bold">
+                                <i class="fa-solid fa-circle-xmark"></i>&nbsp;&nbsp;{{ $ticket->estado }}
+                            </span> 
                         @elseif($ticket->estado === 'En Curso') 
-                            <span style="color:blue;font-weight:bold"><i class="fa-solid fa-circle"></i>&nbsp;&nbsp;{{$ticket->estado}}</span>
+                            <span style="color:blue;font-weight:bold">
+                                <i class="fa-solid fa-circle"></i>&nbsp;&nbsp;{{ $ticket->estado }}
+                            </span> 
                         @endif 
-                          
-                        </td>
+                    </td>
                         <td>{{ $ticket->creado}}</td>
                         <td class="acciones">
                             <!-- <a href="{{ route('ver.Editar', $ticket->id) }}" class="icono" title="Editar Ticket"><i class="fa-solid fa-pen-to-square"></i></a>&nbsp;|&nbsp; -->
@@ -384,7 +408,15 @@ nav.pagination a {
             border-radius: 5px;
             transition: background-color 0.3s ease;
         }
-
+            .sinasignar{
+                    border:none;
+                    padding:7px;
+                    border-radius:5px;
+                    cursor:pointer
+                    }
+        .sinasignar:hover{
+            background-color: white;
+        }
         .dropdown-content a:hover {
             background-color: #f0f0f0;
         }
@@ -597,7 +629,7 @@ nav.pagination a {
             box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
         }
 
-        .filter-container input[type="text"], .filter-container input[type="date"], .filter-container button {
+        .filter-container input[type="text"], .filter-container input[type="date"], .filter-container button, .filter-container select {
             padding: 10px;
             border: 1px solid #ddd;
             border-radius: 5px;

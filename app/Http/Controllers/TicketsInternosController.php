@@ -138,7 +138,8 @@ public function saveAtach(Request $request, $id)
         $username = Auth::user()->username;
     
         
-        $query = Ticket_Interno::where('estado', 'Abierto');
+         $query = Ticket_Interno::whereIn('estado', ['Abierto', 'En Curso']);
+
     
      
         if ($request->filled('id')) {
@@ -176,7 +177,9 @@ public function saveAtach(Request $request, $id)
         if ($request->filled('creado')) {
             $query->whereDate('creado', '>=', $request->input('creado'));
         }
-    
+     if ($request->filled('estado')) {
+            $query->where('estado', 'like', '%' . $request->input('estado') . '%');
+        }
         
         $tickets = $query->paginate(10);
     

@@ -161,6 +161,9 @@
                             </form>
                             @endif
                             &nbsp;| -->
+                               @if ($ticket->ask_nova)
+                              <a href="{{ route('interno.mostrar', $ticket->id) }}"  class="iconoC"  title="Ticket con conversación">   <i class="fa-solid fa-comments"  style="cursor:pointer"></i>&nbsp;|
+                            @endif
                             <a href="{{ route('interno.mostrar', $ticket->id) }}" class="icono"  title="VerTicket"><i class="fa-solid fa-eye"></i></a>
                             
 
@@ -513,7 +516,16 @@ nav.pagination a {
         .icono:hover {
             color: #b4c3d6; 
         }
+        .iconoC {
+            color: black;
+            font-size: 15px; 
+            text-decoration: none; 
+            transition: color 0.3s ease; 
+        }
 
+        .iconoC:hover {
+            color:rgb(105, 105, 105)
+        }
         .borrar {
             background: none; 
             border: none; 
