@@ -77,6 +77,15 @@
         <input type="text" name="bastidor" placeholder="Bastidor" value="{{ request('bastidor') }}">
         <input type="text" name="observaciones_ticket" placeholder="Observaciones" value="{{ request('obserbaciones_ticket') }}">
         <input type="date" name="creado" placeholder="Fecha de creacion" value="{{ request('creado') }}">
+              @if(Auth::user()->rol =="admin")
+          <select name="team_id">
+            <option value="" label="Selecciona Cliente..."></option>
+            <option value="1">Dismoauto</option>
+            <option value="2">Vera Import</option>
+            <option value="3">Talleres Riscal</option>
+            <option value="5">Aldauto</option>
+        </select>
+        @endif
         <button type="submit">Filtrar</button>
         <a href="{{ route('ver.cerrados') }}"><i class="fa-solid fa-eraser"></i> Limpiar</a>
     </div>
@@ -613,7 +622,7 @@ nav.pagination a {
             box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
         }
 
-        .filter-container input[type="text"], .filter-container input[type="date"], .filter-container button {
+        .filter-container input[type="text"], .filter-container input[type="date"], .filter-container button, .filter-container select {
             padding: 10px;
             border: 1px solid #ddd;
             border-radius: 5px;

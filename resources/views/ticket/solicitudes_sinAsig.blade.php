@@ -82,6 +82,15 @@
             <option value="En Curso">En Curso</option>
             <option value="Cerrado">Cerrado</option>
         </select>
+              @if(Auth::user()->rol =="admin")
+          <select name="team_id">
+            <option value="" label="Selecciona Cliente..."></option>
+            <option value="1">Dismoauto</option>
+            <option value="2">Vera Import</option>
+            <option value="3">Talleres Riscal</option>
+            <option value="5">Aldauto</option>
+        </select>
+        @endif
         <button type="submit">Filtrar</button>
         <a href="{{ route('ver.solicitudes.totales') }}"><i class="fa-solid fa-eraser"></i> Limpiar</a>
     </div>

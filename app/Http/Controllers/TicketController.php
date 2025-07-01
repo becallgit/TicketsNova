@@ -103,6 +103,8 @@ class TicketController extends Controller
             return $query->where('creado', 'like', "%{$creado}%");
         })->when($request->estado, function ($query, $estado) {
             return $query->where('estado', 'like', "%{$estado}%");
+        })->when($request->team_id, function ($query, $team_id) {
+            return $query->where('team_id', 'like', "%{$team_id}%");
         });
     
     
@@ -152,7 +154,10 @@ class TicketController extends Controller
             return $query->where('creado', 'like', "%{$creado}%");
         })->when($request->estado, function ($query, $estado) {
             return $query->where('estado', 'like', "%{$estado}%");
+        })->when($request->team_id, function ($query, $team_id) {
+            return $query->where('team_id', 'like', "%{$team_id}%");
         });
+    
     
         $tickets->orderBy('creado', 'desc');
         if (Auth::user()->rol == "admin") {
@@ -200,7 +205,10 @@ class TicketController extends Controller
             return $query->where('creado', 'like', "%{$creado}%");
         })->when($request->estado, function ($query, $estado) {
             return $query->where('estado', 'like', "%{$estado}%");
+        })->when($request->team_id, function ($query, $team_id) {
+            return $query->where('team_id', 'like', "%{$team_id}%");
         });
+    
         
         $tickets->orderBy('creado', 'desc');
         if (Auth::user()->rol == "admin") {
@@ -419,7 +427,10 @@ public function VerCerrados(Request $request)
         return $query->where('observaciones_ticket', 'like', "%{$observaciones_ticket}%");
     })->when($request->creado, function ($query, $creado) {
         return $query->where('creado', 'like', "%{$creado}%");
-    });
+    })->when($request->team_id, function ($query, $team_id) {
+            return $query->where('team_id', 'like', "%{$team_id}%");
+        });
+    
 
     $ticketsQuery->orderBy('creado', 'desc');
     if ($user->rol != 'admin') {
