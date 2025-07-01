@@ -221,7 +221,8 @@ class TicketController extends Controller
                                ->whereNotIn('id', $assignedTicketIds);
         }
         
-        $tickets = $query->paginate(10)->appends($request->all());
+       $tickets = $tickets->paginate(10)->appends($request->all());
+
     
         return view('ticket.solicitudes_sinAsig', compact('username', 'tickets'));
     }
