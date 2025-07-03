@@ -77,7 +77,7 @@
         <input type="text" name="marca" placeholder="Marca" value="{{ request('marca') }}">
         <input type="text" name="sede" placeholder="Sede" value="{{ request('sede') }}">
         <input type="text" name="observaciones" placeholder="Observaciones" value="{{ request('observaciones') }}">
-        < <select name="estado">
+         <select name="estado">
             <option value="" label="Selecciona Estado..."></option>
             <option value="Abierto">Abierto</option>
             <option value="En Curso">En Curso</option>

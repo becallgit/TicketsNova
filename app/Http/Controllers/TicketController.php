@@ -485,7 +485,7 @@ public function MostrarDismoauto(Request $request, $team_id){
 
 
  
-    $tickets = $tickets->orderBy('creado', 'desc')->paginate(10);
+    $tickets = $tickets->orderBy('creado', 'desc')->paginate(10)->appends($request->all());
 
 
 
