@@ -31,5 +31,9 @@ class Ticket_Interno extends Model
    {
        return $this->hasOneThrough(User::class, Asignados_Internos::class, 'id_ticket', 'id', 'id', 'id_user');
    }
-   
+   public function asignaciones()
+{
+    return $this->hasMany(\App\Models\Asignados_Internos::class, 'id_ticket');
+}
+
 }

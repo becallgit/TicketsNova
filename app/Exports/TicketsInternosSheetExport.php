@@ -20,20 +20,21 @@ class TicketsInternosSheetExport implements FromCollection, WithMapping, WithHea
 
     public function map($ticket): array
     {
-        $asignadoA = $ticket->usuarioAsignado->pluck('user.username')->join(', ') ?: 'No asignado';
+      $asignadoA = $ticket->asignaciones->pluck('user.username')->join(', ') ?: 'No asignado';
+
 
         return [
             $ticket->id,
             $ticket->solicitante,
             $ticket->para,
+            $asignadoA,
             $ticket->tipo_solicitud,
             $ticket->cliente,
             $ticket->marca,
             $ticket->sede,
             $ticket->observaciones,
             $ticket->estado,
-            $ticket->creado,
-            $asignadoA,
+            $ticket->creado,  
             $ticket->cerrado,
             $ticket->adjuntos,
             $ticket->answer_client,
@@ -47,6 +48,7 @@ class TicketsInternosSheetExport implements FromCollection, WithMapping, WithHea
             'ID',
             'Solicitante',
             'Para',
+            'Asignado A',
             'Tipo Solicitud',
             'Cliente',
             'Marca',
@@ -54,7 +56,7 @@ class TicketsInternosSheetExport implements FromCollection, WithMapping, WithHea
             'Observaciones',
             'Estado',
             'Creado',
-            'Asignado A',
+            
             'Cerrado',
             'Adjuntos',
             'Respuesta Cliente',

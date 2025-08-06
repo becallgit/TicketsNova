@@ -27,13 +27,14 @@ class TickersScriptSheetExport implements FromCollection, WithMapping, WithHeadi
             $ticket->id,
             $ticket->nombre_cliente,
             optional($ticket->team)->nombre,
+            $asignadoA,
             $ticket->matricula,
             $ticket->bastidor,
             $ticket->telefono,
             $ticket->observaciones_ticket,
             $ticket->estado,
             $ticket->creado,
-            $asignadoA,
+          
             $ticket->cerrado,
             $ticket->presupuesto,
         ];
@@ -45,13 +46,14 @@ class TickersScriptSheetExport implements FromCollection, WithMapping, WithHeadi
             'ID',
             'Nombre Cliente',
             'Cliente', 
+              'Asignado A',
             'Matricula',
             'Bastidor',
             'Telefono',
             'Observaciones Ticket',
             'Estado',
             'Creado',
-            'Asignado A',
+          
             'Cerrado',
             'Presupuesto',
         ];
