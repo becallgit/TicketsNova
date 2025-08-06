@@ -54,7 +54,7 @@ Route::middleware(['auth'])->group(function () {
     Route::post('/tickets/{ticket}/actualizar/estado', [TicketController::class, 'actualizarEstado'])->name('tickets.actualizar.estado');
 
 
-    Route::get('/export-tickets', [DashboardController::class, 'exportData'])->name('tickets.export');
+    Route::get('/export-tickets', [DashboardController::class, 'export'])->name('tickets.export');
 
     Route::get('/Tickets/direct/{team_id}', [TicketController::class, 'MostrarDismoauto'])->name('ver.accesoDirecto');
 

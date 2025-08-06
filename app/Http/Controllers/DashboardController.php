@@ -11,7 +11,7 @@ use Illuminate\Http\Request;
 use Maatwebsite\Excel\Concerns\FromCollection;
 use Maatwebsite\Excel\Facades\Excel;
 use Illuminate\Support\Facades\DB;
-use App\Exports\ticketsExports;
+use App\Exports\TicketsExport;
 use Carbon\Carbon;
 class DashboardController extends Controller
 {
@@ -64,20 +64,10 @@ class DashboardController extends Controller
     
 
     
-    public function exportData()
-    {
-        try{
-
-        
-        $data = Ticket::with(['team', 'categoria', 'sede', 'campana', 'motivoPausado'])
-                      ->select('id', 'solicitante', 'team_id', 'id_tipo', 'id_categoria', 'id_sede', 'id_campana', 'asunto', 'descripcion', 'estado', 'prioridad', 'creado', 'actualizado', 'asignado', 'cerrado')
-                      ->get();
-
-        $actual = Carbon::now()->format('d-m-Y');
-        return Excel::download(new ticketsExports($data), "Exportacion-Tickets-$actual.xlsx");
-        }catch(Exception $e){
-            Log::error('Error al exportar los tickets a excel: ' . $e->getMessage());
+        public function export()
+        {
+               $actual = Carbon::now()->format('d-m-Y');
+            return Excel::download(new TicketsExport, "TICKETS-NOVA-$actual.xlsx");
         }
-    }
-    
+            
 }

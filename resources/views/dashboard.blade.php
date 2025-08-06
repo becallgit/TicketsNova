@@ -44,6 +44,9 @@
                     </div>
                 </li>
               @endif
+                 @if (Auth::user()->username == "superadmin")
+              <li><a href="{{route('tickets.export')}}"><i class="fa-regular fa-file-excel"></i>&nbsp;&nbsp;Exportar a Excel </a></li>
+             @endif
             </ul>
         </div>
 
@@ -68,7 +71,9 @@
     @foreach ($ticketsPorEquipo as $equipo)
         @if ($equipo->nombre == 'Nova') 
             <div class="equipo nova">
-                <div class="team-title">{{ $equipo->nombre }}</div>
+                <div class="team-title">{{ $equipo->nombre }} </div>
+                
+
                 <div class="tarjetas-container">
                     <div class="tarjeta">
                         <div class="texto">Solicitudes Abiertas</div>
@@ -143,7 +148,21 @@
             box-sizing: border-box;
             background-color: #f5f5f5;
         }
+        .exp{
+            text-decoration:none;
+            border:2px solid #8598b1;
+            background-color:#8598b1;
+            border-radius:5px;
+            padding:6px;
+            color:white;
 
+            
+        }
+        .exp:hover{
+                   background-color:transparent;
+                   color:#8598b1;
+                   font-weight:bold;
+        }
         .navbar {
             background-color: white;
             color: #333;
