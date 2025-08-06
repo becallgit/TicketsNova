@@ -20,7 +20,6 @@ class TickersScriptSheetExport implements FromCollection, WithMapping, WithHeadi
     public function map($ticket): array
     {
         return [
-            $ticket->solicitante,
             $ticket->nombre_cliente,
             optional($ticket->team)->nombre,
             $ticket->matricula,
@@ -39,7 +38,6 @@ class TickersScriptSheetExport implements FromCollection, WithMapping, WithHeadi
     public function headings(): array
     {
         return [
-            'Solicitante',
             'Nombre Cliente',
             'Cliente', 
             'Matricula',
