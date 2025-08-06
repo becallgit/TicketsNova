@@ -15,6 +15,7 @@ class TicketsInternosSheetExport implements FromCollection, WithHeadings, WithTi
     public function collection()
     {
         return Ticket_Interno::select([
+            'id',
             'solicitante',
             'para',
             'tipo_solicitud',
@@ -35,6 +36,7 @@ class TicketsInternosSheetExport implements FromCollection, WithHeadings, WithTi
     public function headings(): array
     {
         return [
+            'ID',
             'Solicitante',
             'Para',
             'Tipo Solicitud',
