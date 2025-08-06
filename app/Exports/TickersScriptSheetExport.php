@@ -34,7 +34,7 @@ class TickersScriptSheetExport implements FromCollection, WithMapping, WithHeadi
             $ticket->observaciones_ticket,
             $ticket->estado,
             $ticket->creado,
-          
+            $ticket->asignado,
             $ticket->cerrado,
             $ticket->presupuesto,
         ];
@@ -53,7 +53,7 @@ class TickersScriptSheetExport implements FromCollection, WithMapping, WithHeadi
             'Observaciones Ticket',
             'Estado',
             'Creado',
-          
+            'Asignado',
             'Cerrado',
             'Presupuesto',
         ];

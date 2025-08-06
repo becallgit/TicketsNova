@@ -36,6 +36,7 @@ class TicketsInternosSheetExport implements FromCollection, WithMapping, WithHea
             $ticket->estado,
             $ticket->creado,  
             $ticket->cerrado,
+            $ticket->asignado,
             $ticket->adjuntos,
             $ticket->answer_client,
             $ticket->ask_nova,
@@ -56,7 +57,7 @@ class TicketsInternosSheetExport implements FromCollection, WithMapping, WithHea
             'Observaciones',
             'Estado',
             'Creado',
-            
+            'Asignado',
             'Cerrado',
             'Adjuntos',
             'Respuesta Cliente',
