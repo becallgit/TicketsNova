@@ -31,10 +31,7 @@ class TickersScriptSheetExport implements FromCollection, WithMapping, WithHeadi
             $ticket->creado,
             $ticket->asignado,
             $ticket->cerrado,
-            $ticket->actualizado,
-            $ticket->id_motivo_pausa,
-            $ticket->pausado,
-            $ticket->tipo_incidencia,
+
             $ticket->presupuesto,
         ];
     }
@@ -44,7 +41,7 @@ class TickersScriptSheetExport implements FromCollection, WithMapping, WithHeadi
         return [
             'Solicitante',
             'Nombre Cliente',
-            'Cliente', // <- Cambio de "Team ID" a "Cliente"
+            'Cliente', 
             'Matricula',
             'Bastidor',
             'Telefono',
@@ -53,10 +50,6 @@ class TickersScriptSheetExport implements FromCollection, WithMapping, WithHeadi
             'Creado',
             'Asignado',
             'Cerrado',
-            'Actualizado',
-            'ID Motivo Pausa',
-            'Pausado',
-            'Tipo Incidencia',
             'Presupuesto',
         ];
     }
