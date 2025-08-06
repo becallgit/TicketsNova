@@ -1,34 +1,42 @@
 <?php
-
 namespace App\Exports;
 
 use App\Models\Ticket;
 use Maatwebsite\Excel\Concerns\FromCollection;
+use Maatwebsite\Excel\Concerns\WithMapping;
 use Maatwebsite\Excel\Concerns\WithHeadings;
 use Maatwebsite\Excel\Concerns\WithTitle;
 use Maatwebsite\Excel\Concerns\WithStyles;
 use Maatwebsite\Excel\Concerns\WithColumnWidths;
 use PhpOffice\PhpSpreadsheet\Worksheet\Worksheet;
 
-class TickersScriptSheetExport implements FromCollection, WithHeadings, WithTitle, WithStyles, WithColumnWidths
+class TickersScriptSheetExport implements FromCollection, WithMapping, WithHeadings, WithTitle, WithStyles, WithColumnWidths
 {
     public function collection()
     {
-        return Ticket::select([
-            'solicitante',
-            'nombre_cliente',
-            'team_id',
-            'matricula',
-            'bastidor',
-            'telefono',
-            'observaciones_ticket',
-            'estado',
-            'creado',
-            'asignado',
-            'cerrado',
-            'tipo_incidencia',
-            'presupuesto',
-        ])->get();
+        return Ticket::with('team')->get(); 
+    }
+
+    public function map($ticket): array
+    {
+        return [
+            $ticket->solicitante,
+            $ticket->nombre_cliente,
+            optional($ticket->team)->nombre,
+            $ticket->matricula,
+            $ticket->bastidor,
+            $ticket->telefono,
+            $ticket->observaciones_ticket,
+            $ticket->estado,
+            $ticket->creado,
+            $ticket->asignado,
+            $ticket->cerrado,
+            $ticket->actualizado,
+            $ticket->id_motivo_pausa,
+            $ticket->pausado,
+            $ticket->tipo_incidencia,
+            $ticket->presupuesto,
+        ];
     }
 
     public function headings(): array
@@ -36,7 +44,7 @@ class TickersScriptSheetExport implements FromCollection, WithHeadings, WithTitl
         return [
             'Solicitante',
             'Nombre Cliente',
-            'Team ID',
+            'Cliente', // <- Cambio de "Team ID" a "Cliente"
             'Matricula',
             'Bastidor',
             'Telefono',
@@ -45,6 +53,9 @@ class TickersScriptSheetExport implements FromCollection, WithHeadings, WithTitl
             'Creado',
             'Asignado',
             'Cerrado',
+            'Actualizado',
+            'ID Motivo Pausa',
+            'Pausado',
             'Tipo Incidencia',
             'Presupuesto',
         ];
@@ -65,7 +76,7 @@ class TickersScriptSheetExport implements FromCollection, WithHeadings, WithTitl
     public function columnWidths(): array
     {
         return [
-            'A' => 20, 'B' => 25, 'C' => 15, 'D' => 20,
+            'A' => 20, 'B' => 25, 'C' => 20, 'D' => 20,
             'E' => 20, 'F' => 20, 'G' => 30, 'H' => 15,
             'I' => 20, 'J' => 20, 'K' => 20, 'L' => 20,
             'M' => 20, 'N' => 20, 'O' => 25, 'P' => 20,
