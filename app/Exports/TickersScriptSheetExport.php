@@ -1,4 +1,5 @@
 <?php
+
 namespace App\Exports;
 
 use App\Models\Ticket;
@@ -14,11 +15,14 @@ class TickersScriptSheetExport implements FromCollection, WithMapping, WithHeadi
 {
     public function collection()
     {
-        return Ticket::with('team')->get(); 
+        return Ticket::with(['team', 'asignaciones.user'])->get();
     }
 
     public function map($ticket): array
     {
+        // Obtener todos los usernames de usuarios asignados
+        $asignadoA = $ticket->asignaciones->pluck('user.username')->join(', ') ?: 'No asignado';
+
         return [
             $ticket->id,
             $ticket->nombre_cliente,
@@ -29,9 +33,8 @@ class TickersScriptSheetExport implements FromCollection, WithMapping, WithHeadi
             $ticket->observaciones_ticket,
             $ticket->estado,
             $ticket->creado,
-            $ticket->asignado,
+            $asignadoA,
             $ticket->cerrado,
-
             $ticket->presupuesto,
         ];
     }
@@ -48,7 +51,7 @@ class TickersScriptSheetExport implements FromCollection, WithMapping, WithHeadi
             'Observaciones Ticket',
             'Estado',
             'Creado',
-            'Asignado',
+            'Asignado A',
             'Cerrado',
             'Presupuesto',
         ];
@@ -69,10 +72,18 @@ class TickersScriptSheetExport implements FromCollection, WithMapping, WithHeadi
     public function columnWidths(): array
     {
         return [
-            'A' => 20, 'B' => 25, 'C' => 20, 'D' => 20,
-            'E' => 20, 'F' => 20, 'G' => 30, 'H' => 15,
-            'I' => 20, 'J' => 20, 'K' => 20, 'L' => 20,
-            'M' => 20, 'N' => 20, 'O' => 25, 'P' => 20,
+            'A' => 10,
+            'B' => 25,
+            'C' => 25,
+            'D' => 20,
+            'E' => 20,
+            'F' => 20,
+            'G' => 35,
+            'H' => 15,
+            'I' => 20,
+            'J' => 25,
+            'K' => 20,
+            'L' => 20,
         ];
     }
 }

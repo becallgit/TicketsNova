@@ -4,33 +4,41 @@ namespace App\Exports;
 
 use App\Models\Ticket_Interno;
 use Maatwebsite\Excel\Concerns\FromCollection;
+use Maatwebsite\Excel\Concerns\WithMapping;
 use Maatwebsite\Excel\Concerns\WithHeadings;
 use Maatwebsite\Excel\Concerns\WithTitle;
 use Maatwebsite\Excel\Concerns\WithStyles;
 use Maatwebsite\Excel\Concerns\WithColumnWidths;
 use PhpOffice\PhpSpreadsheet\Worksheet\Worksheet;
 
-class TicketsInternosSheetExport implements FromCollection, WithHeadings, WithTitle, WithStyles, WithColumnWidths
+class TicketsInternosSheetExport implements FromCollection, WithMapping, WithHeadings, WithTitle, WithStyles, WithColumnWidths
 {
     public function collection()
     {
-        return Ticket_Interno::select([
-            'id',
-            'solicitante',
-            'para',
-            'tipo_solicitud',
-            'cliente',
-            'marca',
-            'sede',
-            'observaciones',
-            'estado',
-            'creado',
-            'asignado',
-            'cerrado',
-            'adjuntos',
-            'answer_client',
-            'ask_nova',
-        ])->get();
+        return Ticket_Interno::with(['asignaciones.user'])->get();
+    }
+
+    public function map($ticket): array
+    {
+        $asignadoA = $ticket->usuarioAsignado->pluck('user.username')->join(', ') ?: 'No asignado';
+
+        return [
+            $ticket->id,
+            $ticket->solicitante,
+            $ticket->para,
+            $ticket->tipo_solicitud,
+            $ticket->cliente,
+            $ticket->marca,
+            $ticket->sede,
+            $ticket->observaciones,
+            $ticket->estado,
+            $ticket->creado,
+            $asignadoA,
+            $ticket->cerrado,
+            $ticket->adjuntos,
+            $ticket->answer_client,
+            $ticket->ask_nova,
+        ];
     }
 
     public function headings(): array
@@ -46,7 +54,7 @@ class TicketsInternosSheetExport implements FromCollection, WithHeadings, WithTi
             'Observaciones',
             'Estado',
             'Creado',
-            'Asignado',
+            'Asignado A',
             'Cerrado',
             'Adjuntos',
             'Respuesta Cliente',
@@ -69,10 +77,21 @@ class TicketsInternosSheetExport implements FromCollection, WithHeadings, WithTi
     public function columnWidths(): array
     {
         return [
-            'A' => 20, 'B' => 20, 'C' => 20, 'D' => 20,
-            'E' => 20, 'F' => 20, 'G' => 30, 'H' => 15,
-            'I' => 20, 'J' => 20, 'K' => 20, 'L' => 20,
-            'M' => 25, 'N' => 25,
+            'A' => 10,
+            'B' => 20,
+            'C' => 20,
+            'D' => 20,
+            'E' => 20,
+            'F' => 20,
+            'G' => 20,
+            'H' => 30,
+            'I' => 15,
+            'J' => 20,
+            'K' => 25,
+            'L' => 20,
+            'M' => 25,
+            'N' => 25,
+            'O' => 25,
         ];
     }
 }
