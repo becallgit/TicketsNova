@@ -41,6 +41,10 @@
                         <a href="{{ route('interno.abiertos') }}"><i class="fa-solid fa-door-open"></i>&nbsp;Abiertos</a>
                         <a href="{{ route('interno.cerrados') }}"><i class="fa-solid fa-door-closed"></i>&nbsp;Cerrados</a>
                     @endif
+                    @if(Auth::user()->read_ti == 1)
+                        <a href="{{ route('interno.solicitud') }}"><i class="fa-solid fa-earth-africa"></i>&nbsp;Totales</a>
+
+                    @endif
                     </div>
                 </li>
               @endif

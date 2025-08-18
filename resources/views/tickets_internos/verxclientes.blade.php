@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>PARA MI</title>
+    <title>SOLICITUDES TOTALES</title>
     <link rel="shortcut icon" type="image/png" href="{{ asset('/images/icononova.png') }}">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.2/css/all.min.css" integrity="sha512-z3gLpd7yknf1YoNbCzqRKc4qyor8gaKU1qmn+CShxbuBusANI9QpRohGBreCFkKxLhei6S9CQXFEbbKuqLg0DA==" crossorigin="anonymous" referrerpolicy="no-referrer" />
     <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@300&display=swap" rel="stylesheet">
@@ -71,10 +71,10 @@
 
 
     <div class="container">
-        <h2 style="text-align:center;">Tickets Asignados Para Mi</h2>
-        <form method="GET" action="{{ route('interno.parami') }}">
+        <h2 style="text-align:center;">Tickets Totales</h2>
+        <form method="GET" action="{{ route('interno.solicitud') }}">
     <div class="filter-container">
-    <input type="text" name="id" placeholder="ID" value="{{ request('id') }}">
+        <input type="text" name="id" placeholder="ID" value="{{ request('id') }}">
         <input type="text" name="para" placeholder="Asignado a" value="{{ request('para') }}">
         <input type="text" name="solicitante" placeholder="Solicitante" value="{{ request('solicitante') }}">        
         <input type="text" name="tipo_solicitud" placeholder="Tipo de solicitud" value="{{ request('tipo_solicitud') }}">
@@ -90,10 +90,11 @@
         </select>
         <input type="date" name="creado" placeholder="Creado" value="{{ request('creado') }}">
         <button type="submit">Filtrar</button>
-        <a href="{{ route('interno.parami') }}"><i class="fa-solid fa-eraser"></i> Limpiar</a>
+        <a href="{{ route('interno.solicitud') }}"><i class="fa-solid fa-eraser"></i> Limpiar</a>
     </div>
 </form>
         <div class="tabla-contenedor">
+   
         <table>
             <thead>
                 <tr>
@@ -117,13 +118,13 @@
                         <td>{{ $ticket->solicitante }}</td>
                         <td>
                         @if ($ticket->usuarioAsignado)
-                        <button type="button" class="btn-asignar asignado" data-ticket-id="{{ $ticket->id }}" >
+                  
                         <i class="fa-solid fa-user-gear"></i>  {{ $ticket->usuarioAsignado->username }}
-                            </button>
+                         
                         @else
-                            <button type="button" class="btn-asignar sinasignar" data-ticket-id="{{ $ticket->id }}">
+                            
                             Sin Asignar
-                            </button>
+                          
 
                            
                         @endif
@@ -134,12 +135,12 @@
                         <td>{{ $ticket->marca }}</td>
                         <td>{{ $ticket->sede }}</td>
                         <td style="max-width: 150px; overflow: hidden; text-overflow: ellipsis; white-space: nowrap;">{{ $ticket->observaciones}}</td>
-                            @php
+                         @php
                         $creado = \Carbon\Carbon::parse($ticket->creado);
                          @endphp
 
                        
-                              <td> 
+                       <td> 
                         @if($ticket->estado === 'Abierto') 
                             @if ($creado->diffInHours(now()) > 24)
                                 <span style="color:darkgreen;font-weight:bold;cursor:pointer" title="Ticket abierto hace más de 24 horas">
@@ -160,7 +161,14 @@
                             </span> 
                         @endif 
                     </td>
-                        <td>{{ $ticket->creado}}</td>
+
+                   
+                    <td>
+                        {{ $creado->format('Y-m-d H:i:s') }}
+                       
+                    </td>
+
+
                         <td class="acciones">
                             <!-- <a href="{{ route('ver.Editar', $ticket->id) }}" class="icono" title="Editar Ticket"><i class="fa-solid fa-pen-to-square"></i></a>&nbsp;|&nbsp; -->
                             <!-- @if(Auth::user()->rol == "admin")
@@ -171,12 +179,9 @@
                             </form>
                             @endif
                             &nbsp;| -->
-                                @if ($ticket->answer_client)
-                             <a href="{{ route('interno.mostrar', $ticket->id) }}"  class="iconoC"  title="Ticket con conversación">   <i class="fa-solid fa-comments"  style="cursor:pointer"></i>&nbsp;|
-                            @endif
-                            <a href="{{ route('interno.mostrar', $ticket->id) }}" class="icono"  title="VerTicket"><i class="fa-solid fa-eye"></i></a>&nbsp;|&nbsp;
+                            <a href="{{ route('interno.mostrar', $ticket->id) }}" class="icono"  title="VerTicket"><i class="fa-solid fa-eye"></i></a>
                             
-                            <a href="{{ route('interno.cerrar', $ticket->id) }}" class="icono"  title="Cerrar Ticket"><i class="fa-solid fa-door-closed"></i></a>
+                            <!-- &nbsp;|&nbsp;<a href="{{ route('interno.cerrar', $ticket->id) }}" class="icono"  title="Cerrar Ticket"><i class="fa-solid fa-door-closed"></i></a> -->
 
                         </td>
 
@@ -185,93 +190,19 @@
                 @endforeach
             </tbody>
         </table>
-    </div>
-    @if ($tickets->isEmpty())
+        </div>
+        @if ($tickets->isEmpty())
             <p class="notickets">No se han encontrado tickets.</p>
         @endif
+    </div>
+    </div>
+ 
     </div>
     <div style="display: flex; justify-content: center;">
     {{ $tickets->links() }}
 </div>
-    <div id="modal-asignar" style="display:none;">
-        <div class="modal-content">
-            <h2>Asignar Usuario</h2>
-            <form id="form-asignar" action="{{ route('interno.asignar') }}" method="POST">
-                @csrf
-                <input type="hidden" id="ticket-id" name="ticket_id">
-                <label for="user-select">Selecciona un usuario:</label>
-                <select id="user-select" name="id_user">
-                    <option value="" label="Selecciona.."></option>
-                </select>
-                <button type="submit">Asignar</button>
-                <button type="button" onclick="closeModal()">Cerrar</button>
-            </form>
-        </div>
-    </div>
+ 
 
-<script>
-    document.querySelectorAll('.btn-asignar').forEach(button => {
-        button.addEventListener('click', function() {
-            const ticketId = this.getAttribute('data-ticket-id');
-            console.log('Ticket ID antes de la llamada:', ticketId); 
-
-            if (!ticketId) {
-                console.error('No se encontró el ID del ticket.');
-                return;
-            }
-
-            document.getElementById('ticket-id').value = ticketId;
-
-            const url = '{{ route("interno.get-users") }}?ticket_id=' + ticketId;
-            console.log('URL de fetch:', url); 
-
-            fetch(url, {
-                method: 'GET',
-                headers: {
-                    'X-CSRF-TOKEN': '{{ csrf_token() }}'
-                }
-            })
-            .then(response => {
-                if (!response.ok) {
-                    throw new Error('Network response was not ok: ' + response.statusText);
-                }
-                return response.json(); 
-            })
-            .then(users => {
-                console.log('Usuarios devueltos:', users); 
-
-                if (!Array.isArray(users)) {
-                    console.error('La respuesta no es un array:', users);
-                    return;
-                }
-
-                const userSelect = document.getElementById('user-select');
-                userSelect.innerHTML = '<option value="" label="Selecciona.."></option>'; 
-
-          
-                users.forEach(user => {
-                    console.log('Usuario:', user);
-                    const option = document.createElement('option');
-                    option.value = user.id; 
-                    option.textContent = user.username;
-                    userSelect.appendChild(option);
-                });
-
-                
-                document.getElementById('modal-asignar').style.display = 'flex';
-            })
-            .catch(error => {
-                console.error('Error:', error); 
-            });
-        });
-    });
-
-
-
-    function closeModal() {
-        document.getElementById('modal-asignar').style.display = 'none';
-    }
-</script>
 
 
 
@@ -337,12 +268,6 @@ nav.pagination span,
 nav.pagination a {
     box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
 }
-    .sinasignar{
-           border:none;
-           padding:7px;
-           border-radius:5px;
-         cursor:pointer
-        }
         body {
             font-family: "Roboto";
             margin: 0;
@@ -497,22 +422,21 @@ nav.pagination a {
             width: 300px;
             box-shadow: 0px 0px 10px rgba(0, 0, 0, 0.1);
         }
+        .sinasignar{
+           border:none;
+           padding:7px;
+           border-radius:5px;
+         cursor:pointer
+        }
+        .sinasignar:hover{
+            background-color: white;
+        }
         .asignado{
             padding:6px;
             border-radius:6px;
             border: none; 
             cursor:pointer;
    
-        }
-         .iconoC {
-            color: black;
-            font-size: 15px; 
-            text-decoration: none; 
-            transition: color 0.3s ease; 
-        }
-
-        .iconoC:hover {
-            color:rgb(105, 105, 105)
         }
         .asignado:hover{
             background-color:white
@@ -647,7 +571,7 @@ nav.pagination a {
             box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
         }
 
-        .filter-container input[type="text"], .filter-container input[type="date"], .filter-container button , .filter-container select {
+        .filter-container input[type="text"], .filter-container input[type="date"], .filter-container button, .filter-container select {
             padding: 10px;
             border: 1px solid #ddd;
             border-radius: 5px;

@@ -63,6 +63,8 @@ Route::middleware(['auth'])->group(function () {
 
     //tickets internos
     Route::get('/Para-mi', [TicketsInternosController::class, 'ParaMi'])->name('interno.parami');
+    Route::get('/Totales', [TicketsInternosController::class, 'InternosParaUsers'])->name('interno.solicitud');
+
     Route::get('/tickets/get-users-in', [TicketsInternosController::class, 'getUsersByTicket'])->name('interno.get-users');
     Route::post('/tickets/asignar-in', [TicketsInternosController::class, 'asignarTicket'])->name('interno.asignar');
     Route::get('/tickets/globales-in', [TicketsInternosController::class, 'Globales'])->name('interno.globales');

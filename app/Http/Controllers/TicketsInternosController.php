@@ -18,33 +18,33 @@ use Illuminate\Support\Facades\Response;
 class TicketsInternosController extends Controller
 {
 
-public function saveAtach(Request $request, $id)
-{
-    $ticket = Ticket_Interno::findOrFail($id);
-    $ticket->update([
-        'ask_nova' => $request->ask_nova,
-        'answer_client' => $request->answer_client
-    ]);
+    public function saveAtach(Request $request, $id)
+    {
+        $ticket = Ticket_Interno::findOrFail($id);
+        $ticket->update([
+            'ask_nova' => $request->ask_nova,
+            'answer_client' => $request->answer_client
+        ]);
 
-    $archivosExistentes = json_decode($ticket->adjuntos, true) ?? [];
+        $archivosExistentes = json_decode($ticket->adjuntos, true) ?? [];
 
-    if ($request->hasFile('adjuntos')) {
-        foreach ($request->file('adjuntos') as $archivo) {
-            $nombreArchivo = $archivo->getClientOriginalName();
-            $archivo->storeAs('archivos', $nombreArchivo, 'public');
+        if ($request->hasFile('adjuntos')) {
+            foreach ($request->file('adjuntos') as $archivo) {
+                $nombreArchivo = $archivo->getClientOriginalName();
+                $archivo->storeAs('archivos', $nombreArchivo, 'public');
 
-            $archivosExistentes[] = [
-                'nombre' => $nombreArchivo,
-                'fecha_subida' => now()->toDateTimeString(),
-            ];
+                $archivosExistentes[] = [
+                    'nombre' => $nombreArchivo,
+                    'fecha_subida' => now()->toDateTimeString(),
+                ];
+            }
         }
+
+        $ticket->adjuntos = json_encode($archivosExistentes);
+        $ticket->save();
+
+        return redirect()->back()->with('success', 'Archivos guardados correctamente.');
     }
-
-    $ticket->adjuntos = json_encode($archivosExistentes);
-    $ticket->save();
-
-    return redirect()->back()->with('success', 'Archivos guardados correctamente.');
-}
 
      public function descargar($nombre)
     {
@@ -57,27 +57,28 @@ public function saveAtach(Request $request, $id)
 
         return response()->download($ruta);
     }
-  public function eliminarArchivo($ticketId, $archivo)
-{
-    $ticket = Ticket_Interno::findOrFail($ticketId);
-    $adjuntos = json_decode($ticket->adjuntos, true) ?? [];
+    public function eliminarArchivo($ticketId, $archivo)
+    {
+        $ticket = Ticket_Interno::findOrFail($ticketId);
+        $adjuntos = json_decode($ticket->adjuntos, true) ?? [];
 
-  $rutaArchivo = Storage::disk('public')->path('archivos/' . $archivo);
-    if (Storage::disk('public')->exists('archivos/' . $archivo)) {
-        Storage::disk('public')->delete('archivos/' . $archivo);
+        $rutaArchivo = Storage::disk('public')->path('archivos/' . $archivo);
+        if (Storage::disk('public')->exists('archivos/' . $archivo)) {
+            Storage::disk('public')->delete('archivos/' . $archivo);
+        }
+
+
+    
+        $adjuntos = array_filter($adjuntos, function ($item) use ($archivo) {
+            return $item['nombre'] !== $archivo;
+        });
+
+        $ticket->adjuntos = json_encode(array_values($adjuntos));
+        $ticket->save();
+
+        return redirect()->back()->with('success', 'Archivo eliminado correctamente.');
     }
-
-
-  
-    $adjuntos = array_filter($adjuntos, function ($item) use ($archivo) {
-        return $item['nombre'] !== $archivo;
-    });
-
-    $ticket->adjuntos = json_encode(array_values($adjuntos));
-    $ticket->save();
-
-    return redirect()->back()->with('success', 'Archivo eliminado correctamente.');
-}
+    
     public function Globales(Request $request)
     {
         $username = Auth::user()->username;
@@ -424,4 +425,60 @@ public function saveAtach(Request $request, $id)
          
     }
     
+    public function InternosParaUsers(Request $request)
+    {
+    $username = Auth::user()->username;
+    $teamId   = Auth::user()->team_id;
+
+    $query = Ticket_Interno::query()
+        ->join('teams', 'tickets_internos.cliente', '=', 'teams.nombre')
+        ->where('teams.id', $teamId)
+        ->select('tickets_internos.*'); 
+
+    if ($request->filled('id')) {
+        $query->where('tickets_internos.id', $request->input('id')); 
+    }
+
+    if ($request->filled('solicitante')) {
+        $query->where('tickets_internos.solicitante', 'like', '%' . $request->input('solicitante') . '%');
+    }
+
+    if ($request->filled('para')) {
+        $query->where('tickets_internos.para', 'like', '%' . $request->input('para') . '%');
+    }
+
+    if ($request->filled('tipo_solicitud')) {
+        $query->where('tickets_internos.tipo_solicitud', 'like', '%' . $request->input('tipo_solicitud') . '%');
+    }
+
+    if ($request->filled('cliente')) {
+        $query->where('tickets_internos.cliente', 'like', '%' . $request->input('cliente') . '%');
+    }
+
+    if ($request->filled('marca')) {
+        $query->where('tickets_internos.marca', 'like', '%' . $request->input('marca') . '%');
+    }
+
+    if ($request->filled('sede')) {
+        $query->where('tickets_internos.sede', 'like', '%' . $request->input('sede') . '%');
+    }
+
+    if ($request->filled('observaciones')) {
+        $query->where('tickets_internos.observaciones', 'like', '%' . $request->input('observaciones') . '%');
+    }
+
+    if ($request->filled('estado')) {
+        $query->where('tickets_internos.estado', 'like', '%' . $request->input('estado') . '%');
+    }
+
+    if ($request->filled('creado')) {
+        $query->whereDate('tickets_internos.creado', '>=', $request->input('creado')); 
+    }
+
+    $query->orderBy('tickets_internos.creado', 'desc');
+
+    $tickets = $query->paginate(10)->appends($request->all());
+
+    return view('tickets_internos.verxclientes', compact('username', 'tickets'));
+}
 }
