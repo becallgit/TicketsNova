@@ -1,16 +1,11 @@
-<!DOCTYPE html>
-<html lang="es">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>SOLICITUDES TOTALES</title>
-    <link rel="shortcut icon" type="image/png" href="{{ asset('/images/icononova.png') }}">
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.2/css/all.min.css" integrity="sha512-z3gLpd7yknf1YoNbCzqRKc4qyor8gaKU1qmn+CShxbuBusANI9QpRohGBreCFkKxLhei6S9CQXFEbbKuqLg0DA==" crossorigin="anonymous" referrerpolicy="no-referrer" />
-    <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@300&display=swap" rel="stylesheet">
 
+@extends('layouts.app')
 
-</head>
-<body>
+@section('title', 'GLOBALES')
+
+@section('content')
+ 
+
   <nav class="navbar">
         <div class="navbar-left">
             <a href="{{ route('dashboard') }}" class="logo"><img src="{{ asset('images/logolargo.png') }}" width="130" alt="Logo"></a>
@@ -675,5 +670,4 @@ nav.pagination a {
             cursor: pointer;
         }
     </style>
-
-</html>
+@endsection
