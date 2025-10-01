@@ -8,7 +8,7 @@
 
 
     <div class="equipos-container {{ $userRole != 'admin' || (isset($ticketsPorEquipo) && $ticketsPorEquipo->count() == 1) ? 'centrado' : '' }}">
-  @if (Auth::user()->rol == "admin" && Auth::user()->username != 'angel.lopez')
+  @if (Auth::user()->rol == "admin" && Auth::user()->username != 'angel.lopez' && Auth::user()->username != 'generico')
     @foreach ($ticketsPorEquipo as $equipo)
         @if ($equipo->nombre == 'Nova') 
             <div class="equipo nova">

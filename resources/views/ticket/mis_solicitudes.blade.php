@@ -44,17 +44,26 @@
                     <tr>
                         <td>{{ $ticket->id }}</td>
                         <td>{{ $ticket->team ? $ticket->team->nombre : 'No asignado' }}</td>
-                        <td>
-                        @if ($ticket->usuarioAsignado)
-                        <button type="button" class="btn-asignar asignado" data-ticket-id="{{ $ticket->id }}" data-team-id="{{ $ticket->team_id }}">
-                        <i class="fa-solid fa-user-gear"></i>  {{ $ticket->usuarioAsignado->username }}
-                            </button>
-                        @else
-                            <button type="button" class="btn-asignar sinasignar" data-ticket-id="{{ $ticket->id }}" data-team-id="{{ $ticket->team_id }}">
-                            Sin Asignar
-                            </button>
+                               <td>
+                        @if(Auth::user()->username != 'generico')
+                        @if ($ticket->usuarioAsignado )
+                            <button type="button" class="btn-asignar asignado" data-ticket-id="{{ $ticket->id }}" data-team-id="{{ $ticket->team_id }}">
+                            <i class="fa-solid fa-user-gear"></i>  {{ $ticket->usuarioAsignado->username }}
+                                </button>
+                            @else
+                                <button type="button" class="btn-asignar sinasignar" data-ticket-id="{{ $ticket->id }}" data-team-id="{{ $ticket->team_id }}">
+                                Sin Asignar
+                                </button>
 
-                           
+                            
+                            @endif
+                        @endif
+                        @if(Auth::user()->username == 'generico')
+                           @if ($ticket->usuarioAsignado )
+                            <i class="fa-solid fa-user-gear"></i>  {{ $ticket->usuarioAsignado->username }}
+                            @else
+                               Sin Asignar
+                                @endif
                         @endif
                         </td>
                         <td>{{ $ticket->nombre_cliente}}</td>

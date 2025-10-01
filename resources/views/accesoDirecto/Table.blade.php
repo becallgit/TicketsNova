@@ -52,16 +52,25 @@
                         <td>{{ $ticket->id }}</td>
                         <td>{{ $ticket->team ? $ticket->team->nombre : 'No asignado' }}</td>
                         <td>
-                        @if ($ticket->usuarioAsignado)
-                        <button type="button" class="btn-asignar asignado" data-ticket-id="{{ $ticket->id }}" data-team-id="{{ $ticket->team_id }}">
-                        <i class="fa-solid fa-user-gear"></i>  {{ $ticket->usuarioAsignado->username }}
-                            </button>
-                        @else
-                            <button type="button" class="btn-asignar sinasignar" data-ticket-id="{{ $ticket->id }}" data-team-id="{{ $ticket->team_id }}">
-                            Sin Asignar
-                            </button>
+                        @if(Auth::user()->username != 'generico')
+                        @if ($ticket->usuarioAsignado )
+                            <button type="button" class="btn-asignar asignado" data-ticket-id="{{ $ticket->id }}" data-team-id="{{ $ticket->team_id }}">
+                            <i class="fa-solid fa-user-gear"></i>  {{ $ticket->usuarioAsignado->username }}
+                                </button>
+                            @else
+                                <button type="button" class="btn-asignar sinasignar" data-ticket-id="{{ $ticket->id }}" data-team-id="{{ $ticket->team_id }}">
+                                Sin Asignar
+                                </button>
 
-                           
+                            
+                            @endif
+                        @endif
+                        @if(Auth::user()->username == 'generico')
+                           @if ($ticket->usuarioAsignado )
+                            <i class="fa-solid fa-user-gear"></i>  {{ $ticket->usuarioAsignado->username }}
+                            @else
+                               Sin Asignar
+                                @endif
                         @endif
                         </td>
                         <td>{{ $ticket->nombre_cliente}}</td>
@@ -106,10 +115,10 @@
                             </form>
                             @endif
                             &nbsp;| -->
-                            <a href="{{ route('ticket.mostrado', $ticket->id) }}" class="icono"  title="VerTicket"><i class="fa-solid fa-eye"></i></a>&nbsp;|&nbsp;
-                            
-                            <a href="{{ route('cerrar.ticket', $ticket->id) }}" class="icono"  title="Cerrar Ticket"><i class="fa-solid fa-door-closed"></i></a>
-
+                            <a href="{{ route('ticket.mostrado', $ticket->id) }}" class="icono"  title="VerTicket"><i class="fa-solid fa-eye"></i></a>
+                        @if(Auth::user()->username != 'generico')
+                         &nbsp;|&nbsp;   <a href="{{ route('cerrar.ticket', $ticket->id) }}" class="icono"  title="Cerrar Ticket"><i class="fa-solid fa-door-closed"></i></a>
+                            @endif
                         </td>
 
                       
