@@ -20,7 +20,6 @@ Route::get('/', function () {
     return view('auth.login');
 });
 
-
 Route::get('/login', [AuthController::class, 'index'])->name('login');
 Route::post('/log-in', [AuthController::class, 'login'])->name('login.custom'); 
 Route::get('/signout', [AuthController::class, 'signOut'])->name('signout');

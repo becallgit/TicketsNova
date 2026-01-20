@@ -114,7 +114,7 @@ class TicketsInternosController extends Controller
         }
         
         if ($request->filled('observaciones')) {
-            $query->where('observaciones_ticket', 'like', '%' . $request->input('observaciones') . '%');
+            $query->where('observaciones', 'like', '%' . $request->input('observaciones') . '%');
         }
         
         if ($request->filled('estado')) {
@@ -172,7 +172,7 @@ class TicketsInternosController extends Controller
         }
     
         if ($request->filled('observaciones')) {
-            $query->where('observaciones_ticket', 'like', '%' . $request->input('observaciones') . '%');
+            $query->where('observaciones', 'like', '%' . $request->input('observaciones') . '%');
         }
     
         if ($request->filled('creado')) {
@@ -224,7 +224,7 @@ class TicketsInternosController extends Controller
         }
     
         if ($request->filled('observaciones')) {
-            $query->where('observaciones_ticket', 'like', '%' . $request->input('observaciones') . '%');
+            $query->where('observaciones', 'like', '%' . $request->input('observaciones') . '%');
         }
     
         if ($request->filled('creado')) {
@@ -278,7 +278,7 @@ class TicketsInternosController extends Controller
         }
     
         if ($request->filled('observaciones')) {
-            $query->where('observaciones_ticket', 'like', '%' . $request->input('observaciones') . '%');
+            $query->where('observaciones', 'like', '%' . $request->input('observaciones') . '%');
         }
     
         if ($request->filled('estado')) {
@@ -405,7 +405,7 @@ class TicketsInternosController extends Controller
         }
     
         if ($request->filled('observaciones')) {
-            $query->where('observaciones_ticket', 'like', '%' . $request->input('observaciones') . '%');
+            $query->where('observaciones', 'like', '%' . $request->input('observaciones') . '%');
         }
     
         if ($request->filled('estado')) {
