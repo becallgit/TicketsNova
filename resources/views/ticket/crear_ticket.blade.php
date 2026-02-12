@@ -15,7 +15,7 @@
     
             <div class="form-group">
                 <label for="tipo_solicitud">Tipo de solicitud</label>
-                <select name="tipo_solicitud" id="tipo_solicitud">
+                <select name="tipo_solicitud" id="tipo_solicitud" required>
                     <option value="" disabled selected>Selecciona...</option>
                     <option value="Incidencia">Incidencia</option>
                     <option value="Mejora">Mejora</option>
@@ -56,7 +56,7 @@
 
         <div class="form-group">
             <label for="sede">Sede</label>
-            <select id="sede" name="sede">
+            <select id="sede" name="sede" required>
                 <option value="" disabled selected>Selecciona cliente primero</option>
             </select>
         </div>
