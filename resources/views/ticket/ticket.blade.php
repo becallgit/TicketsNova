@@ -46,6 +46,11 @@
                      <input type="text" id="team_id" name="team_id" value="{{ $ticket->team ? $ticket->team->nombre : 'No asignado' }}" readonly>
                  
                  </div>
+                      <div class="form-group">
+                     <label for="campana">Campaña</label>
+                     <input type="text" id="campana" name="campana" value="{{ $ticket->campana }}" readonly>
+                 
+                 </div>
                  <div class="form-group">
                      <label for="id_user">Asignado a:</label>
                      <input type="text" id="id_user" name="id_user" value="{{ $ticket->usuarioAsignado->username ?? 'No asignado' }}" readonly>
