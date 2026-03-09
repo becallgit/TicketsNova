@@ -36,7 +36,7 @@
                 </li>
               @endif
                  @if (Auth::user()->username == "superadmin" || Auth::user()->username == "inma.salguero")
-              <li><a href="{{route('tickets.export')}}"><i class="fa-regular fa-file-excel"></i>&nbsp;&nbsp;Exportar a Excel </a></li>
+              <li><a href="#" id="open-export-modal"><i class="fa-regular fa-file-excel"></i>&nbsp;&nbsp;Exportar a Excel </a></li>
              @endif
             </ul>
         </div>
@@ -58,3 +58,253 @@
             </li>
         </ul>
     </nav>
+
+    <div id="modal-export-excel" style="display:none;">
+        <div class="modal-content">
+            <h2>Exportar a Excel</h2>
+            <button type="button" id="close-export-modal-top" aria-label="Cerrar">×</button>
+
+            <div class="export-grid" style="margin-top: 10px;">
+                <div class="export-col">
+                    <h3 style="margin-top: 0;">Tickets</h3>
+                    <form method="GET" action="{{ route('tickets.export.filter') }}">
+                        <label for="ticket_para">Para</label>
+                        <select id="ticket_para" name="para">
+                            <option value="" label="Selecciona..."></option>
+                            @foreach ($teams as $team)
+                                <option value="{{ $team->id }}">{{ $team->nombre }}</option>
+                            @endforeach
+                        </select>
+
+                        <label for="ticket_fecha_desde">Creado desde</label>
+                        <input type="date" id="ticket_fecha_desde" name="creado_desde">
+
+                        <label for="ticket_fecha_hasta">Creado hasta</label>
+                        <input type="date" id="ticket_fecha_hasta" name="creado_hasta">
+
+                        <label for="ticket_matricula">Matricula</label>
+                        <input type="text" id="ticket_matricula" name="matricula">
+
+                        <button type="submit">Exportar Tickets</button>
+                    </form>
+                </div>
+
+                <div class="export-col">
+                    <h3 style="margin-top: 0;">Tickets Internos</h3>
+                    <form method="GET" action="{{ route('tickets_internos.export.filter') }}">
+                        <label for="ti_cliente">Cliente</label>
+                        <select id="ti_cliente" name="cliente">
+                            <option value="" label="Selecciona..."></option>
+                            @foreach ($teams as $team)
+                                <option value="{{ $team->nombre }}">{{ $team->nombre }}</option>
+                            @endforeach
+                        </select>
+
+                        <label for="ti_fecha_desde">Creado desde</label>
+                        <input type="date" id="ti_fecha_desde" name="creado_desde">
+
+                        <label for="ti_fecha_hasta">Creado hasta</label>
+                        <input type="date" id="ti_fecha_hasta" name="creado_hasta">
+
+                        <label for="ti_sede">Sede</label>
+                        <input type="text" id="ti_sede" name="sede">
+
+                        <label for="ti_matricula">Matricula</label>
+                        <input type="text" id="ti_matricula" name="matricula">
+
+                        <label for="ti_tipo_solicitud">Tipo de solicitud</label>
+                        <select id="ti_tipo_solicitud" name="tipo_solicitud">
+                            <option value="" label="Selecciona..."></option>
+                            <option value="Incidencia">Incidencia</option>
+                            <option value="Mejora">Mejora</option>
+                            <option value="Consulta">Consulta</option>
+                        </select>
+
+                        <button type="submit">Exportar Tickets Internos</button>
+                        <button type="button" id="close-export-modal">Cerrar</button>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        (function () {
+            const openBtn = document.getElementById('open-export-modal');
+            const modal = document.getElementById('modal-export-excel');
+            const closeBtn = document.getElementById('close-export-modal');
+            const closeTopBtn = document.getElementById('close-export-modal-top');
+
+            if (!openBtn || !modal || !closeBtn || !closeTopBtn) return;
+
+            openBtn.addEventListener('click', function (e) {
+                e.preventDefault();
+                modal.style.display = 'flex';
+            });
+
+            closeBtn.addEventListener('click', function () {
+                modal.style.display = 'none';
+            });
+
+            closeTopBtn.addEventListener('click', function () {
+                modal.style.display = 'none';
+            });
+
+            modal.addEventListener('click', function (e) {
+                if (e.target === modal) modal.style.display = 'none';
+            });
+        })();
+    </script>
+
+    <style>
+        #modal-export-excel {
+            position: fixed;
+            left: 0;
+            top: 0;
+            width: 100%;
+            height: 100%;
+            background-color: rgba(0, 0, 0, 0.6);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            z-index: 999;
+            padding: 12px;
+        }
+
+        #modal-export-excel,
+        #modal-export-excel * {
+            box-sizing: border-box;
+        }
+
+        #modal-export-excel .modal-content {
+            background-color: #ffffff;
+            padding: 16px;
+            border-radius: 10px;
+            width: 100%;
+            max-width: 520px;
+            max-height: calc(100vh - 24px);
+            overflow: auto;
+            box-shadow: 0px 10px 20px rgba(0, 0, 0, 0.2);
+            text-align: left;
+            position: relative;
+        }
+
+        #close-export-modal-top {
+            position: absolute;
+            top: 10px;
+            right: 10px;
+            width: 36px;
+            height: 36px;
+            border-radius: 8px;
+            border: 1px solid #e5e5e5;
+            background: #fff;
+            color: #333;
+            font-size: 22px;
+            line-height: 30px;
+            cursor: pointer;
+        }
+
+        #close-export-modal-top:hover {
+            background: #f3f3f3;
+        }
+
+        #modal-export-excel .modal-content h2 {
+            text-align: center;
+            margin-top: 0;
+        }
+
+        #modal-export-excel label {
+            display: block;
+            margin-top: 8px;
+            margin-bottom: 4px;
+            font-size: 14px;
+        }
+
+        #modal-export-excel input,
+        #modal-export-excel select {
+            width: 100%;
+            max-width: 100%;
+            padding: 9px 10px;
+            border: 1px solid #ccc;
+            border-radius: 5px;
+            font-size: 14px;
+            color: #333;
+            height: 40px;
+            line-height: 20px;
+        }
+
+        #modal-export-excel input[type="date"] {
+            appearance: none;
+            -webkit-appearance: none;
+            -moz-appearance: none;
+        }
+
+        #modal-export-excel select {
+            background-color: #fff;
+        }
+
+        #modal-export-excel button {
+            width: 100%;
+            max-width: 100%;
+            padding: 10px;
+            margin-top: 10px;
+            border: none;
+            border-radius: 5px;
+            font-size: 16px;
+            cursor: pointer;
+            font-weight: 600;
+            transition: background-color 0.3s ease;
+        }
+
+        #modal-export-excel form {
+            display: grid;
+            gap: 8px;
+        }
+
+        #modal-export-excel form button {
+            margin-top: 4px;
+        }
+
+        #modal-export-excel button[type="submit"] {
+            background-color: #8598b1;
+            color: #ffffff;
+        }
+
+        #modal-export-excel .export-grid {
+            display: grid;
+            grid-template-columns: 1fr;
+            gap: 16px;
+        }
+
+        #modal-export-excel .export-col {
+            padding: 12px;
+            border: 1px solid #eee;
+            border-radius: 8px;
+        }
+
+        @media (min-width: 900px) {
+            #modal-export-excel .modal-content {
+                max-width: 980px;
+                padding: 22px;
+            }
+
+            #modal-export-excel .export-grid {
+                grid-template-columns: 1fr 1fr;
+                align-items: start;
+            }
+        }
+
+        @media (max-width: 420px) {
+            #modal-export-excel .modal-content {
+                border-radius: 8px;
+            }
+
+            #modal-export-excel .export-col {
+                padding: 10px;
+            }
+
+            #modal-export-excel button {
+                font-size: 15px;
+            }
+        }
+    </style>

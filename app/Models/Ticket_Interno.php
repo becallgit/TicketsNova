@@ -23,7 +23,8 @@ class Ticket_Interno extends Model
         'cerrado',
         'adjuntos',
         'answer_client',
-        'ask_nova'
+        'ask_nova',
+        'matricula'
     ];
    protected $table = "tickets_internos";
 

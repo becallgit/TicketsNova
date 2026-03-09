@@ -13,9 +13,42 @@ use PhpOffice\PhpSpreadsheet\Worksheet\Worksheet;
 
 class TicketsInternosSheetExport implements FromCollection, WithMapping, WithHeadings, WithTitle, WithStyles, WithColumnWidths
 {
+    protected $filters;
+
+    public function __construct(array $filters = [])
+    {
+        $this->filters = $filters;
+    }
+
     public function collection()
     {
-        return Ticket_Interno::with(['asignaciones.user'])->get();
+        $query = Ticket_Interno::with(['asignaciones.user']);
+
+        if (!empty($this->filters['cliente'])) {
+            $query->where('cliente', 'like', '%' . $this->filters['cliente'] . '%');
+        }
+
+        if (!empty($this->filters['sede'])) {
+            $query->where('sede', 'like', '%' . $this->filters['sede'] . '%');
+        }
+
+        if (!empty($this->filters['matricula'])) {
+            $query->where('matricula', 'like', '%' . $this->filters['matricula'] . '%');
+        }
+
+        if (!empty($this->filters['tipo_solicitud'])) {
+            $query->where('tipo_solicitud', $this->filters['tipo_solicitud']);
+        }
+
+        if (!empty($this->filters['creado_desde'])) {
+            $query->whereDate('creado', '>=', $this->filters['creado_desde']);
+        }
+
+        if (!empty($this->filters['creado_hasta'])) {
+            $query->whereDate('creado', '<=', $this->filters['creado_hasta']);
+        }
+
+        return $query->get();
     }
 
     public function map($ticket): array

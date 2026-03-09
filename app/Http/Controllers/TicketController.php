@@ -41,6 +41,7 @@ class TicketController extends Controller
             $ticket->marca = $request->input('marca');
             $ticket->sede = $request->input('sede');
             $ticket->observaciones = $request->input('observaciones');
+            $ticket->matricula = $request->input('matricula');
             $ticket->estado = "Abierto";
             $ticket->creado = Carbon::now()->format('Y-m-d H:i:s');
          

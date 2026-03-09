@@ -12,6 +12,8 @@ use Maatwebsite\Excel\Concerns\FromCollection;
 use Maatwebsite\Excel\Facades\Excel;
 use Illuminate\Support\Facades\DB;
 use App\Exports\TicketsExport;
+use App\Exports\TickersScriptSheetExport;
+use App\Exports\TicketsInternosSheetExport;
 use Carbon\Carbon;
 class DashboardController extends Controller
 {
@@ -68,6 +70,22 @@ class DashboardController extends Controller
         {
                $actual = Carbon::now()->format('d-m-Y');
             return Excel::download(new TicketsExport, "TICKETS-NOVA-$actual.xlsx");
+        }
+
+        public function exportTicketsFilter(Request $request)
+        {
+            $filters = $request->only(['para', 'creado_desde', 'creado_hasta', 'matricula']);
+            $actual = Carbon::now()->format('d-m-Y');
+
+            return Excel::download(new TickersScriptSheetExport($filters), "TICKETS-$actual.xlsx");
+        }
+
+        public function exportTicketsInternosFilter(Request $request)
+        {
+            $filters = $request->only(['cliente', 'creado_desde', 'creado_hasta', 'sede', 'matricula', 'tipo_solicitud']);
+            $actual = Carbon::now()->format('d-m-Y');
+
+            return Excel::download(new TicketsInternosSheetExport($filters), "TICKETS-INTERNOS-$actual.xlsx");
         }
             
 }

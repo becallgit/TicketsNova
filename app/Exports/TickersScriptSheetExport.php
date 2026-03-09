@@ -13,9 +13,34 @@ use PhpOffice\PhpSpreadsheet\Worksheet\Worksheet;
 
 class TickersScriptSheetExport implements FromCollection, WithMapping, WithHeadings, WithTitle, WithStyles, WithColumnWidths
 {
+    protected $filters;
+
+    public function __construct(array $filters = [])
+    {
+        $this->filters = $filters;
+    }
+
     public function collection()
     {
-        return Ticket::with(['team', 'asignaciones.user'])->get();
+        $query = Ticket::with(['team', 'asignaciones.user']);
+
+        if (!empty($this->filters['para'])) {
+            $query->where('team_id', $this->filters['para']);
+        }
+
+        if (!empty($this->filters['matricula'])) {
+            $query->where('matricula', 'like', '%' . $this->filters['matricula'] . '%');
+        }
+
+        if (!empty($this->filters['creado_desde'])) {
+            $query->whereDate('creado', '>=', $this->filters['creado_desde']);
+        }
+
+        if (!empty($this->filters['creado_hasta'])) {
+            $query->whereDate('creado', '<=', $this->filters['creado_hasta']);
+        }
+
+        return $query->get();
     }
 
     public function map($ticket): array

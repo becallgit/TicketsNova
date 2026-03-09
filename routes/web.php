@@ -54,10 +54,10 @@ Route::middleware(['auth'])->group(function () {
 
 
     Route::get('/export-tickets', [DashboardController::class, 'export'])->name('tickets.export');
+    Route::get('/export-tickets-filter', [DashboardController::class, 'exportTicketsFilter'])->name('tickets.export.filter');
+    Route::get('/export-tickets-internos-filter', [DashboardController::class, 'exportTicketsInternosFilter'])->name('tickets_internos.export.filter');
 
     Route::get('/Tickets/direct/{team_id}', [TicketController::class, 'MostrarDismoauto'])->name('ver.accesoDirecto');
-
-
 
 
     //tickets internos

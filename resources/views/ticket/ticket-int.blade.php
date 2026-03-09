@@ -82,6 +82,10 @@
                     <input type="text" id="sede" name="sede" value="{{ $ticket->sede }}" readonly>
                 </div>
                 <div class="form-group">
+                    <label for="matricula">Matricula</label>
+                    <input type="text" id="matricula" name="matricula" value="{{ $ticket->matricula }}" readonly>
+                </div>
+                <div class="form-group">
                     <label for="observaciones_ticket">Observaciones</label>
                     <textarea name="observaciones" id="observaciones" readonly>{{ $ticket->observaciones}}</textarea>
                 </div>

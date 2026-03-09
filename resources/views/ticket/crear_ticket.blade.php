@@ -61,7 +61,10 @@
             </select>
         </div>
 
-       
+            <div class="form-group">
+            <label for="matricula">Matricula</label>
+          <input type="text" id="matricula" name="matricula">
+        </div>
             <div class="form-group">
                 <label for="observaciones">Observaciones</label>
                 <textarea name="observaciones" id="observaciones"></textarea>
