@@ -26,6 +26,7 @@
             <option value="En Curso">En Curso</option>
             <option value="Cerrado">Cerrado</option>
         </select>
+        <input type="text" name="matricula" placeholder="Matricula" value="{{ request('Matricula') }}">
         <button type="submit">Filtrar</button>
         <a href="{{ route('interno.abiertos') }}"><i class="fa-solid fa-eraser"></i> Limpiar</a>
     </div>
@@ -41,6 +42,7 @@
                     <th>Cliente</th>
                     <th>Marca</th>
                     <th>Sede</th>
+                    <th>Matricula</th>
                     <th>Observaciones</th>
                     <th>Estado</th>
                     <th>Fecha de Creación</th>
@@ -70,6 +72,7 @@
                         <td>{{ $ticket->cliente }}</td>
                         <td>{{ $ticket->marca }}</td>
                         <td>{{ $ticket->sede }}</td>
+                        <td>{{ $ticket->matricula }}</td>
                         <td style="max-width: 150px; overflow: hidden; text-overflow: ellipsis; white-space: nowrap;">{{ $ticket->observaciones}}</td>
                            @php
                         $creado = \Carbon\Carbon::parse($ticket->creado);

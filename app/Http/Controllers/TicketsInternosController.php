@@ -124,7 +124,9 @@ class TicketsInternosController extends Controller
         if ($request->filled('creado')) {
             $query->whereDate('creado', '>=', $request->input('creado')); 
         }
-        
+          if ($request->filled('matricula')) {
+            $query->whereDate('matricula', '>=', $request->input('matricula')); 
+        }
      
        
         $query->orderBy('creado', 'desc');
@@ -181,7 +183,10 @@ class TicketsInternosController extends Controller
      if ($request->filled('estado')) {
             $query->where('estado', 'like', '%' . $request->input('estado') . '%');
         }
-        
+               if ($request->filled('matricula')) {
+            $query->whereDate('matricula', '>=', $request->input('matricula')); 
+        }
+     
         $tickets = $query->paginate(10)->appends($request->all());
     
         return view('tickets_internos.abiertas', compact('username', 'tickets'));
@@ -230,7 +235,10 @@ class TicketsInternosController extends Controller
         if ($request->filled('creado')) {
             $query->whereDate('creado', '>=', $request->input('creado'));
         }
-    
+           if ($request->filled('matricula')) {
+            $query->whereDate('matricula', '>=', $request->input('matricula')); 
+        }
+     
     
         $tickets = $query->paginate(10)->appends($request->all());
     
@@ -288,7 +296,10 @@ class TicketsInternosController extends Controller
         if ($request->filled('creado')) {
             $query->whereDate('creado', '>=', $request->input('creado'));
         }
-    
+           if ($request->filled('matricula')) {
+            $query->whereDate('matricula', '>=', $request->input('matricula')); 
+        }
+     
       
         $tickets = $query->paginate(10)->appends($request->all());
     
@@ -416,7 +427,10 @@ class TicketsInternosController extends Controller
             $query->whereDate('creado', '>=', $request->input('creado'));
         }
     
-      
+             if ($request->filled('matricula')) {
+            $query->whereDate('matricula', '>=', $request->input('matricula')); 
+        }
+     
         $tickets = $query->paginate(10)->appends($request->all());
 
     
