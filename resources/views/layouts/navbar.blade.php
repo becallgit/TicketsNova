@@ -35,7 +35,8 @@
                     </div>
                 </li>
               @endif
-                 @if (Auth::user()->username == "superadmin" || Auth::user()->username == "inma.salguero")
+                 @if (Auth::user()->username == "superadmin" || Auth::user()->username == "inma.salguero"
+                 ||Auth::user()->username == "tatiana.pizarro"  || Auth::user()->username == "ignaciof.caravia"  )
               <li><a href="#" id="open-export-modal"><i class="fa-regular fa-file-excel"></i>&nbsp;&nbsp;Exportar a Excel </a></li>
              @endif
             </ul>
